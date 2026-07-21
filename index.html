@@ -91,6 +91,12 @@ html.is-mobile .work-list{transform:none!important}
   display:block;color:var(--ink-soft);font-size:10px;
   letter-spacing:.12em;margin-top:2px;opacity:.75;
 }
+.name-alt .alt-name{
+  border-bottom:1px solid transparent;
+  transition:color .3s,border-color .3s;
+}
+.name-alt .alt-name:hover{color:var(--ink);border-color:var(--ink)}
+.name-alt .sep{opacity:.5}
 .c-tl{top:26px;left:5vw}
 .c-mr{
   top:44%;right:5vw;text-align:right;
@@ -896,6 +902,9 @@ html.is-mobile #langBadge .label{font-size:10px;letter-spacing:.28em}
 .hero-name .outline{
   color:transparent;-webkit-text-stroke:1.6px var(--ink);
 }
+/* 라틴 문자는 폭이 넓어 한 단계 작게 — 두 줄의 무게를 맞춤 */
+.hero-name.latin-first{font-size:clamp(44px,10vw,150px)}
+.hero-name.latin-first .outline{font-size:1.18em}
 .hero-sub{
   display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 26px;
   margin-top:26px;
@@ -1041,19 +1050,50 @@ html.is-mobile #langBadge .label{font-size:10px;letter-spacing:.28em}
 .lang.overlay-mode button{color:#a99c8a}
 .lang button.on{background:var(--ink);color:var(--paper)}
 .lang.overlay-mode button.on{background:var(--panel-ink);color:var(--panel)}
-/* 전환 중 스윕 라이트 */
+/* 전환 중 스윕 라이트 — 좌상단에서 우하단으로 대각선 진행 */
 #langSweep{
   position:fixed;inset:0;z-index:190;pointer-events:none;opacity:0;
-  background:linear-gradient(105deg,transparent 40%,rgba(36,56,232,.22) 50%,transparent 60%);
-  background-size:280% 100%;background-position:120% 0;
+  background:linear-gradient(128deg,
+    transparent 38%,
+    rgba(36,56,232,.10) 46%,
+    rgba(36,56,232,.30) 50%,
+    rgba(36,56,232,.10) 54%,
+    transparent 62%);
+  background-size:300% 300%;background-position:130% -30%;
 }
 #langSweep.run{
   opacity:1;
-  animation:sweep .9s cubic-bezier(.5,0,.3,1) forwards;
+  animation:sweep 1.5s cubic-bezier(.45,0,.25,1) forwards;
 }
 @keyframes sweep{
-  0%{background-position:130% 0;opacity:1}
-  100%{background-position:-40% 0;opacity:0}
+  0%{background-position:130% -30%;opacity:1}
+  100%{background-position:-40% 130%;opacity:0}
+}
+/* 대각선을 따라 지나가는 얇은 광선 */
+#langBeam{
+  position:fixed;inset:-40%;z-index:191;pointer-events:none;opacity:0;
+  background:linear-gradient(128deg,
+    transparent calc(50% - 2px),
+    rgba(36,56,232,.75) 50%,
+    transparent calc(50% + 2px));
+  transform:translate3d(-120%,-120%,0);
+}
+#langBeam.run{animation:beam 1.5s cubic-bezier(.45,0,.25,1) forwards}
+@keyframes beam{
+  0%{transform:translate3d(-120%,-120%,0);opacity:0}
+  12%{opacity:1}
+  88%{opacity:1}
+  100%{transform:translate3d(120%,120%,0);opacity:0}
+}
+/* 글자가 광선을 맞는 순간 튀어오름 */
+[data-i18n].flip{
+  animation:flipCh .5s cubic-bezier(.3,1.4,.4,1);
+}
+@keyframes flipCh{
+  0%{transform:translateY(0) scaleY(1);filter:blur(0)}
+  30%{transform:translateY(-3px) scaleY(.82);filter:blur(1.2px)}
+  60%{transform:translateY(1px) scaleY(1.06);filter:blur(0)}
+  100%{transform:none;filter:blur(0)}
 }
 /* 언어 코드 대형 배지 — 어떤 언어로 바뀌었는지 확실히 보여줌 */
 #langBadge{
@@ -1072,9 +1112,9 @@ html.is-mobile #langBadge .label{font-size:10px;letter-spacing:.28em}
   font-family:var(--mono);font-size:12px;letter-spacing:.34em;
   text-transform:uppercase;color:var(--accent);opacity:0;
 }
-#langBadge.run{animation:badgeIn 1.05s cubic-bezier(.22,1,.36,1) forwards}
-#langBadge.run .code{animation:badgeCode 1.05s cubic-bezier(.22,1,.36,1) forwards}
-#langBadge.run .label{animation:badgeLabel 1.05s ease forwards}
+#langBadge.run{animation:badgeIn 1.7s cubic-bezier(.22,1,.36,1) forwards}
+#langBadge.run .code{animation:badgeCode 1.7s cubic-bezier(.22,1,.36,1) forwards}
+#langBadge.run .label{animation:badgeLabel 1.7s ease forwards}
 /* 상장(회전) 화면에서는 카드·설명과 겹치지 않도록
    상단 헤더 옆 빈 공간에 가로로 작게 표시 */
 #langBadge.compact{
@@ -1099,11 +1139,12 @@ html.is-mobile #langBadge .label{font-size:10px;letter-spacing:.28em}
 @keyframes badgeLabel{0%{opacity:0}25%{opacity:1}70%{opacity:1}100%{opacity:0}}
 /* 전환 중 본문을 살짝 눌러 변화가 느껴지게 */
 #smooth.lang-shift,.detail.lang-shift,.about.lang-shift,.awards.lang-shift{
-  animation:langShift .9s cubic-bezier(.22,1,.36,1);
+  animation:langShift 1.5s cubic-bezier(.22,1,.36,1);
 }
 @keyframes langShift{
   0%{filter:blur(0)}
-  22%{filter:blur(3px)}
+  20%{filter:blur(2.6px)}
+  55%{filter:blur(1.4px)}
   100%{filter:blur(0)}
 }
 /* 활성 언어 버튼 강조 */
@@ -1234,6 +1275,7 @@ html.is-mobile .contact-row .mail{font-size:11.5px}
 <div class="fade-bottom" aria-hidden="true"></div>
 
 <div id="langSweep" aria-hidden="true"></div>
+<div id="langBeam" aria-hidden="true"></div>
 <div id="langBadge" aria-hidden="true"><span class="code"></span><span class="label"></span></div>
 <div class="lang" id="lang" role="group" aria-label="Language">
   <button data-lang="ko" class="on">KO</button>
@@ -1245,9 +1287,8 @@ html.is-mobile .contact-row .mail{font-size:11.5px}
 <div class="corner c-tl">
   <span data-i18n="portfolioOf">Portfolio of</span><br>
   <a role="button" tabindex="0" id="nameLink" class="name-link"></a>
-  <span class="name-alt" id="nameAlt"></span>
-</div>
-<div class="corner c-mr" data-i18n="role">Backend<br>Engineer</div>
+  <span class="name-alt" id="nameAlt"></span></div>
+<div class="corner c-mr" data-i18n="role">IT<br>Engineer</div>
 <div class="corner c-br" data-i18n="openTo">일본 취업 준비 중 · 2026</div>
 <div class="corner c-bl"><span class="pulse"></span><span data-i18n="server">server: running</span> · <span class="kb" id="kbCount">0%</span> loaded</div>
 <button class="about-btn magnetic" id="aboutBtn" data-i18n="about">About</button>
@@ -1259,8 +1300,8 @@ html.is-mobile .contact-row .mail{font-size:11.5px}
       <div class="hero-inner" id="heroInner">
         <div class="hero-name" id="heroName"></div>
         <div class="hero-sub" id="heroSub">
-          <span class="pill" data-i18n="heroRole">Backend Engineer</span>
-          <span data-i18n="heroEdu">동국대 컴퓨터공학 · 도쿄도시대 교환</span>
+          <span class="pill" data-i18n="heroRole">IT Engineer</span>
+          <span data-i18n="heroEdu">동국대학교 컴퓨터공학과</span>
           <span class="accent" data-i18n="heroOpen">일본 취업 준비 중 · 2026</span>
         </div>
       </div>
@@ -1271,7 +1312,7 @@ html.is-mobile .contact-row .mail{font-size:11.5px}
 
     <p class="intro">
       <span id="typeLine"><em>$</em> </span><span class="caret" id="caret"></span><br>
-      <span class="l2" id="introL2">// 아래 엔드포인트를 호출(클릭)하면 각 프로젝트가 응답합니다.</span>
+      <span class="l2" id="introL2" data-i18n="introL2">// 아래 엔드포인트를 호출(클릭)하면 각 프로젝트가 응답합니다.</span>
     </p>
     <div class="search">
       <div class="search-box">
@@ -1442,13 +1483,12 @@ html.is-mobile .contact-row .mail{font-size:11.5px}
 <div class="about" id="about" role="dialog" aria-modal="true">
   <div class="about-inner">
     <p class="tag" data-i18n="aboutTag">GET /about — 200 OK</p>
-    <h2 data-i18n="aboutH">백엔드 엔지니어,<br><em>서울 → 도쿄.</em></h2>
-    <p data-i18n="aboutP1">동국대학교 WISE캠퍼스 컴퓨터공학과 4학년. 도쿄도시대학 정보공학부에서 교환 학생으로 1년을 보내며 일본에서 일하겠다는 방향을 굳혔고, 지금은 일본 취업을 준비하고 있습니다.</p>
+    <h2 data-i18n="aboutH">IT 엔지니어,<br><em>부산 → 일본.</em></h2>
+    <p data-i18n="aboutP1">부산에서 나고 자라 동국대학교 WISE캠퍼스 컴퓨터공학과에 재학 중인 4학년입니다. 도쿄도시대학에서 교환 학생으로 1년을 보내며 일본에서 일하겠다는 방향을 굳혔고, 지금은 일본 취업을 준비하고 있습니다.</p>
     <p data-i18n="aboutP2">Java와 Spring Boot로 백엔드를 개발합니다. 6인 팀 프로젝트 Stack Snapshot에서 백엔드를 맡아 실제 행사에서 운영되는 서비스를 만들었고, 2024 경주 지역문제 해결 해커톤에서는 팀 Null의 백엔드로 종합 2위를 수상했습니다. 지금은 알고리즘과 자료구조를 다지면서 디지털 신호처리와 인공지능 쪽으로 관심을 넓히고 있습니다.</p>
     <div class="about-facts">
       <div><span data-i18n="fEducation">학력</span><b data-i18n="vEducation">동국대학교 WISE캠퍼스 컴퓨터공학과</b></div>
-      <div><span data-i18n="fExchange">교환 학생</span><b data-i18n="vExchange">도쿄도시대학 정보공학부</b></div>
-      <div><span data-i18n="fFocus">주력 분야</span><b data-i18n="vFocus">Java · Spring Boot · Backend</b></div>
+      <div><span data-i18n="fFocus">주력 분야</span><b data-i18n="vFocus">Java · Spring Boot · 백엔드</b></div>
       <div><span data-i18n="fAward">수상</span><b data-i18n="vAward">2024 경주 해커톤 종합 2위</b></div>
     </div>
     <div class="contact-row">
@@ -1608,27 +1648,41 @@ if(reduced){
 
 /* ---------- 텍스트 스크램블 디코딩 (타이틀 호버) ---------- */
 const GLYPHS='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#/<>_';
+/* 스크램블 — 새 요청이 오면 이전 것을 즉시 중단하고 다시 시작 */
+let scrambleToken=0;
 function scramble(el,fresh){
-  if(reduced||el._busy)return;
-  el._busy=true;
+  if(reduced||!el)return;
   if(fresh)delete el.dataset.text;
   const original=el.dataset.text||(el.dataset.text=el.textContent);
+  if(!original)return;
+  const myToken=++scrambleToken;
+  el._token=myToken;
   const len=original.length;
   let frame=0;
-  const total=Math.min(26,len*2.2);
+  /* 긴 문장은 프레임 수를 늘리지 않고 비율로 처리 — 너무 오래 끌지 않게 */
+  const total=Math.min(30,Math.max(12,len*0.7));
   (function step(){
+    /* 다른 스크램블이 시작됐으면 즉시 원문으로 확정하고 종료 */
+    if(el._token!==myToken)return;
     frame++;
     const resolved=Math.floor(len*(frame/total));
     let out='';
     for(let i=0;i<len;i++){
       const ch=original[i];
-      if(ch===' '){out+=' ';continue;}
+      if(ch===' '||ch==='\n'){out+=ch;continue;}
       out+= i<resolved ? ch : GLYPHS[(Math.random()*GLYPHS.length)|0];
     }
     el.textContent=out;
     if(frame<total){requestAnimationFrame(step);}
-    else{el.textContent=original;el._busy=false;}
+    else{el.textContent=original;}
   })();
+}
+/* 진행 중인 모든 스크램블을 즉시 끝내고 원문 확정 */
+function settleScrambles(){
+  scrambleToken++;
+  document.querySelectorAll('[data-text]').forEach(el=>{
+    if(el.dataset.text)el.textContent=el.dataset.text;
+  });
 }
 document.querySelectorAll('#workList h3').forEach(h=>{
   h.closest('a').addEventListener('mouseenter',()=>scramble(h));
@@ -1675,103 +1729,185 @@ document.querySelectorAll('.work-list li').forEach((li,i)=>{
 });
 
 /* ---------- project data ---------- */
+/* 프로젝트 데이터 — title/desc/meta는 언어별로 준비 */
 const P = {
   stacksnapshot:{
-    link:"https://github.com/mjgwon24/stack-snapshot-back",
     route:"/works/stack-snapshot", status:"200 OK", type:"web-application",
-    title:"Stack Snapshot",
-    desc:"행사장에서 참가자가 직접 찍은 네컷사진을 프레임을 적용해 QR 코드로 즉시 내려받는 서비스. 6인 팀에서 백엔드를 맡아 Spring Boot 기반 API를 개발했습니다. 현장에서 요구되는 빠른 응답 속도와 안정적인 서버 운영을 고려했고, 실사용자 피드백을 반영해 이후 행사에서도 재사용할 수 있도록 고도화했습니다.",
+    link:"https://github.com/mjgwon24/stack-snapshot-back",
+    title:{ko:"Stack Snapshot",ja:"Stack Snapshot",en:"Stack Snapshot"},
+    meta:{ko:"Spring Boot · JPA · MySQL · 6인 팀 백엔드",
+          ja:"Spring Boot · JPA · MySQL · 6人チームのバックエンド",
+          en:"Spring Boot · JPA · MySQL · backend of a 6-person team"},
+    desc:{
+      ko:"행사장에서 참가자가 직접 찍은 네컷사진을 프레임을 적용해 QR 코드로 즉시 내려받는 서비스. 6인 팀에서 백엔드를 맡아 Spring Boot 기반 API를 개발했습니다. 현장에서 요구되는 빠른 응답 속도와 안정적인 서버 운영을 고려했고, 실사용자 피드백을 반영해 이후 행사에서도 재사용할 수 있도록 고도화했습니다.",
+      ja:"イベント会場で参加者が撮影した4コマ写真にフレームを適用し、QRコードで即座にダウンロードできるサービスです。6人チームでバックエンドを担当し、Spring BootによるAPIを開発しました。現場で求められる応答速度と安定した運用を考慮し、利用者のフィードバックを反映して次回以降のイベントでも再利用できるよう改良しました。",
+      en:"A service that applies frames to photo-booth shots taken at events and delivers them instantly via QR code. I owned the backend on a six-person team, building the Spring Boot API. I focused on the response speed and stability the venue demanded, then refined it from real user feedback so it could be reused at later events."},
     stack:["Java","Spring Boot","JPA","MySQL","Swagger","Nginx"],
-    shots:[{cap:"메인 화면"},{cap:"프레임 선택"},{cap:"QR 다운로드"},{cap:"경품 뽑기"}]
+    shots:[{cap:{ko:"메인 화면",ja:"メイン画面",en:"Main screen"}},
+           {cap:{ko:"프레임 선택",ja:"フレーム選択",en:"Frame picker"}},
+           {cap:{ko:"QR 다운로드",ja:"QRダウンロード",en:"QR download"}},
+           {cap:{ko:"경품 뽑기",ja:"抽選機能",en:"Prize draw"}}]
   },
   gyeongju:{
-    link:"https://github.com/Dongguk-Developer/2024hackathon_null",
     route:"/works/gyeongju-hackathon", status:"200 OK", type:"award",
-    title:"Gyeongju Hackathon",
-    desc:"2024 경주 지역문제 해결 해커톤에서 팀 Null의 백엔드를 담당해 종합 2위(경북ICT융합산업진흥협회장상)를 수상했습니다. 경주 관광지를 돌며 사진 레이어를 수집하고, 이를 합성해 체험형 무드등을 제작하는 앱으로, 관광 예약과 레이어 합성 기능의 서버를 구현했습니다.",
+    link:"https://github.com/Dongguk-Developer/2024hackathon_null",
+    title:{ko:"Gyeongju Hackathon",ja:"Gyeongju Hackathon",en:"Gyeongju Hackathon"},
+    meta:{ko:"2024 경주 해커톤 종합 2위 · 백엔드",
+          ja:"2024 慶州ハッカソン 総合2位 · バックエンド",
+          en:"2024 Gyeongju Hackathon, 2nd overall · backend"},
+    desc:{
+      ko:"2024 경주 지역문제 해결 해커톤에서 팀 Null의 백엔드를 담당해 종합 2위(경북ICT융합산업진흥협회장상)를 수상했습니다. 경주 관광지를 돌며 사진 레이어를 수집하고, 이를 합성해 체험형 무드등을 제작하는 앱으로, 관광 예약과 레이어 합성 기능의 서버를 구현했습니다.",
+      ja:"2024 慶州地域課題解決ハッカソンでチームNullのバックエンドを担当し、総合2位(慶北ICT融合産業振興協会長賞)を受賞しました。慶州の観光地を巡って写真レイヤーを集め、それを合成して体験型ムードランプを作るアプリで、観光予約とレイヤー合成機能のサーバーを実装しました。",
+      en:"At the 2024 Gyeongju regional problem-solving hackathon I handled the backend for team Null and we placed 2nd overall, receiving the Gyeongbuk ICT Convergence Industry Association Chairman's Award. The app has users collect photo layers while touring Gyeongju, then composites them into a keepsake mood lamp; I built the servers for tour booking and layer compositing."},
     stack:["Python","Django","Swagger","Git Flow"],
-    shots:[{cap:"시스템 아키텍처"},{cap:"예약 기능"},{cap:"수상 상장"}]
-  },
-  stackup:{
-    link:"https://suheon927.notion.site/11573099573e8045bec2c186c84ba43d",
-    route:"/works/stackup-2nd", status:"200 OK", type:"program",
-    title:"StackUp 2nd",
-    desc:"2023년 StackUp 2기 활동. 여러 분야의 주제를 폭넓게 다루며 학습했고, 그 과정에서 정리한 자료를 Notion에 체계적으로 축적했습니다. 배운 것을 문서로 남겨 다른 사람이 읽을 수 있는 형태로 만드는 습관을 이때 들였습니다.",
-    stack:["Notion","Study","Documentation"],
-    shots:[{cap:"학습 자료 아카이브"},{cap:"정리 노트"}]
-  },
-  springlab:{
-    link:"https://github.com/suheon927/springboot-lab",
-    route:"/works/springboot-lab", status:"200 OK", type:"repository",
-    title:"Spring Boot Lab",
-    desc:"Spring Boot의 Controller·Service·Repository 계층 구조와 JPA를 직접 다뤄보며 백엔드 기본기를 다진 개인 실습 저장소. 프로젝트에서 마주친 개념을 따로 떼어내 작은 예제로 재현하고 검증하는 용도로 쓰고 있습니다.",
-    stack:["Java","Spring Boot","JPA","Gradle"],
-    shots:[{cap:"계층 구조 실습"},{cap:"API 테스트"}]
-  },
-  android:{
-    link:"https://github.com/suheon927/AndroidStudioProjects",
-    route:"/works/android-projects", status:"200 OK", type:"repository",
-    title:"Android Projects",
-    desc:"Android Studio 기반 Java 앱 개발 실습 모음. 화면 구성과 생명주기, 이벤트 처리를 다루며 모바일 클라이언트 관점에서 백엔드 API가 어떻게 소비되는지를 이해하는 계기가 됐습니다.",
-    stack:["Java","Android Studio"],
-    shots:[{cap:"앱 화면"},{cap:"기능 구현"}]
-  },
-  perceptron:{
-    link:"https://github.com/suheon927/PerceptronPractice",
-    route:"/works/perceptron-practice", status:"200 OK", type:"study",
-    title:"Perceptron Practice",
-    desc:"퍼셉트론을 직접 구현하며 인공지능의 기초를 다진 실습. 현재 관심을 두고 있는 디지털 신호처리·인공지능 분야로 이어지는 출발점입니다.",
-    stack:["Python","Jupyter","NumPy"],
-    shots:[{cap:"학습 곡선"},{cap:"구현 노트"}]
-  },
-  minigames:{
-    link:"https://github.com/suheon927/MiniGames",
-    route:"/works/mini-games", status:"200 OK", type:"repository",
-    title:"Mini Games",
-    desc:"C 언어로 만든 콘솔 미니게임 모음. 포인터와 메모리를 직접 다루면서 시스템 프로그래밍의 기초를 익혔고, 알고리즘과 자료구조를 실제 코드로 옮기는 연습이 됐습니다.",
-    stack:["C","Unix"],
-    shots:[{cap:"게임 화면"},{cap:"소스 구조"}]
-  },
-  tokyo:{
-    route:"/works/tokyo-exchange", status:"200 OK", type:"experience",
-    title:"Tokyo Exchange",
-    desc:"도쿄도시대학 정보공학부에서 교환 학생으로 1년. 수업과 생활 전부를 일본어로 소화했고, 카페 아르바이트를 하며 현지 감각을 익혔습니다. 이 시간이 일본에서 일하겠다는 방향을 만들었습니다.",
-    stack:["日本語","情報工学","1 Year"],
-    shots:[{cap:"캠퍼스"},{cap:"수강 과목"}]
-  },
-  thesis:{
-    route:"/works/image-codec-study", status:"200 OK", type:"research",
-    title:"Image Codec Study",
-    desc:"JPEG XL, AVIF, WebP, JPEG, PNG를 이미지 카테고리별로 실증 비교하는 졸업 연구. 선행 연구 두 편(Barina 2021, Barman & Martini 2020)을 확장해 JPEG XL을 추가하고 이미지 커버리지를 넓혔습니다.",
-    stack:["JPEG XL","AVIF","WebP","Benchmark"],
-    shots:[{cap:"압축률 비교"},{cap:"화질 지표"},{cap:"카테고리 커버리지"}]
+    shots:[{cap:{ko:"시스템 아키텍처",ja:"システム構成",en:"Architecture"}},
+           {cap:{ko:"예약 기능",ja:"予約機能",en:"Booking"}},
+           {cap:{ko:"수상 상장",ja:"表彰状",en:"Certificate"}}]
   },
   coffeelab:{
     route:"/works/coffee-lab", status:"200 OK", type:"web-application",
-    title:"Coffee Lab",
-    desc:"스페셜티 커피 원두와 브루잉 기록을 위한 개인 웹 서비스. Notion으로 운영하던 커피 카탈로그를 직접 만든 서비스로 확장해, Kakao OAuth 인증부터 DB 설계, Vercel 배포까지 전체 사이클을 혼자 구축했습니다.",
+    title:{ko:"Coffee Lab",ja:"Coffee Lab",en:"Coffee Lab"},
+    meta:{ko:"Next.js · Supabase · 개인 프로젝트",
+          ja:"Next.js · Supabase · 個人プロジェクト",
+          en:"Next.js · Supabase · personal project"},
+    desc:{
+      ko:"스페셜티 커피 원두와 브루잉 기록을 위한 개인 웹 서비스. Notion으로 운영하던 커피 카탈로그를 직접 만든 서비스로 확장해, Kakao OAuth 인증부터 DB 설계, Vercel 배포까지 전체 사이클을 혼자 구축했습니다.",
+      ja:"スペシャルティコーヒーの豆と抽出記録を管理する個人向けWebサービスです。Notionで運用していたカタログを自作のサービスへ拡張し、Kakao OAuth認証からDB設計、Vercelへのデプロイまで一人で構築しました。",
+      en:"A personal web service for tracking specialty coffee beans and brew logs. I grew a catalogue I had been keeping in Notion into a real service, handling the whole cycle myself: Kakao OAuth, database design, and deployment on Vercel."},
     stack:["Next.js","Supabase","Kakao OAuth","Vercel"],
-    shots:[{cap:"원두 카탈로그"},{cap:"브루잉 기록"},{cap:"인증 흐름"}]
+    shots:[{cap:{ko:"원두 카탈로그",ja:"豆のカタログ",en:"Bean catalogue"}},
+           {cap:{ko:"브루잉 기록",ja:"抽出記録",en:"Brew log"}},
+           {cap:{ko:"인증 흐름",ja:"認証フロー",en:"Auth flow"}}]
+  },
+  thesis:{
+    route:"/works/image-codec-study", status:"200 OK", type:"research",
+    title:{ko:"Image Codec Study",ja:"Image Codec Study",en:"Image Codec Study"},
+    meta:{ko:"졸업 연구 · JPEG XL / AVIF / WebP",
+          ja:"卒業研究 · JPEG XL / AVIF / WebP",
+          en:"Graduation research · JPEG XL / AVIF / WebP"},
+    desc:{
+      ko:"JPEG XL, AVIF, WebP, JPEG, PNG를 이미지 카테고리별로 실증 비교하는 졸업 연구. 선행 연구 두 편(Barina 2021, Barman & Martini 2020)을 확장해 JPEG XL을 추가하고 이미지 커버리지를 넓혔습니다.",
+      ja:"JPEG XL・AVIF・WebP・JPEG・PNGを画像カテゴリ別に実証比較する卒業研究です。先行研究2件(Barina 2021、Barman & Martini 2020)を拡張し、JPEG XLを追加して対象画像の範囲を広げました。",
+      en:"Graduation research empirically comparing JPEG XL, AVIF, WebP, JPEG and PNG across image categories. It extends two prior studies (Barina 2021; Barman & Martini 2020) by adding JPEG XL and widening the range of test images."},
+    stack:["JPEG XL","AVIF","WebP",{ko:"벤치마크",ja:"ベンチマーク",en:"Benchmark"}],
+    shots:[{cap:{ko:"압축률 비교",ja:"圧縮率の比較",en:"Compression ratio"}},
+           {cap:{ko:"화질 지표",ja:"画質指標",en:"Quality metrics"}},
+           {cap:{ko:"카테고리 커버리지",ja:"カテゴリ範囲",en:"Category coverage"}}]
+  },
+  tokyo:{
+    route:"/works/tokyo-exchange", status:"200 OK", type:"experience",
+    title:{ko:"Tokyo Exchange",ja:"Tokyo Exchange",en:"Tokyo Exchange"},
+    meta:{ko:"도쿄도시대학 정보공학부 · 1년",
+          ja:"東京都市大学 情報工学部 · 1年",
+          en:"Tokyo City University, Information Engineering · 1 year"},
+    desc:{
+      ko:"도쿄도시대학 정보공학부에서 교환 학생으로 1년. 수업과 생활 전부를 일본어로 소화했고, 카페 아르바이트를 하며 현지 감각을 익혔습니다. 이 시간이 일본에서 일하겠다는 방향을 만들었습니다.",
+      ja:"東京都市大学 情報工学部で交換留学生として1年間学びました。授業も生活もすべて日本語で過ごし、カフェでのアルバイトを通じて現地の感覚を身につけました。この経験が日本で働くという進路を決めました。",
+      en:"A year as an exchange student at Tokyo City University's Faculty of Information Engineering. I handled classes and daily life entirely in Japanese and worked part-time at a café to get a feel for the country. That year set my direction toward working in Japan."},
+    stack:[{ko:"일본어",ja:"日本語",en:"Japanese"},
+           {ko:"정보공학",ja:"情報工学",en:"Info. Engineering"},
+           {ko:"1년",ja:"1年",en:"1 Year"}],
+    shots:[{cap:{ko:"캠퍼스",ja:"キャンパス",en:"Campus"}},
+           {cap:{ko:"수강 과목",ja:"履修科目",en:"Coursework"}}]
+  },
+  springlab:{
+    route:"/works/springboot-lab", status:"200 OK", type:"repository",
+    link:"https://github.com/suheon927/springboot-lab",
+    title:{ko:"Spring Boot Lab",ja:"Spring Boot Lab",en:"Spring Boot Lab"},
+    meta:{ko:"Java · Spring Boot · 개인 실습",
+          ja:"Java · Spring Boot · 個人演習",
+          en:"Java · Spring Boot · personal practice"},
+    desc:{
+      ko:"Spring Boot의 Controller·Service·Repository 계층 구조와 JPA를 직접 다뤄보며 백엔드 기본기를 다진 개인 실습 저장소. 프로젝트에서 마주친 개념을 따로 떼어내 작은 예제로 재현하고 검증하는 용도로 쓰고 있습니다.",
+      ja:"Spring BootのController・Service・Repository層とJPAを実際に扱い、バックエンドの基礎を固めた個人演習リポジトリです。プロジェクトで出会った概念を切り出し、小さな例で再現して確かめる場として使っています。",
+      en:"A personal practice repository where I work through Spring Boot's controller/service/repository layers and JPA to solidify backend fundamentals. I use it to isolate concepts I meet in real projects and verify them in small examples."},
+    stack:["Java","Spring Boot","JPA","Gradle"],
+    shots:[{cap:{ko:"계층 구조 실습",ja:"レイヤー構成の演習",en:"Layered structure"}},
+           {cap:{ko:"API 테스트",ja:"APIテスト",en:"API tests"}}]
+  },
+  stackup:{
+    route:"/works/stackup-2nd", status:"200 OK", type:"program",
+    link:"https://suheon927.notion.site/11573099573e8045bec2c186c84ba43d",
+    title:{ko:"StackUp 2nd",ja:"StackUp 2期",en:"StackUp 2nd"},
+    meta:{ko:"2023 · 학습 아카이브",ja:"2023 · 学習アーカイブ",en:"2023 · study archive"},
+    desc:{
+      ko:"2023년 StackUp 2기 활동. 여러 분야의 주제를 폭넓게 다루며 학습했고, 그 과정에서 정리한 자료를 Notion에 체계적으로 축적했습니다. 배운 것을 문서로 남겨 다른 사람이 읽을 수 있는 형태로 만드는 습관을 이때 들였습니다.",
+      ja:"2023年のStackUp 2期の活動です。幅広い分野のテーマを学び、その過程でまとめた資料をNotionに体系的に蓄積しました。学んだことを文書として残し、他の人が読める形にする習慣はこの時期に身につきました。",
+      en:"My time in the second StackUp cohort in 2023. I studied a broad range of topics and built up an organised archive of my notes in Notion. This is where I picked up the habit of writing what I learn into something another person can read."},
+    stack:["Notion",{ko:"학습",ja:"学習",en:"Study"},{ko:"문서화",ja:"ドキュメント",en:"Documentation"}],
+    shots:[{cap:{ko:"학습 자료 아카이브",ja:"学習資料アーカイブ",en:"Study archive"}},
+           {cap:{ko:"정리 노트",ja:"まとめノート",en:"Notes"}}]
+  },
+  perceptron:{
+    route:"/works/perceptron-practice", status:"200 OK", type:"study",
+    link:"https://github.com/suheon927/PerceptronPractice",
+    title:{ko:"Perceptron Practice",ja:"Perceptron Practice",en:"Perceptron Practice"},
+    meta:{ko:"Python · AI 기초 실습",ja:"Python · AI基礎演習",en:"Python · AI fundamentals"},
+    desc:{
+      ko:"퍼셉트론을 직접 구현하며 인공지능의 기초를 다진 실습. 현재 관심을 두고 있는 디지털 신호처리·인공지능 분야로 이어지는 출발점입니다.",
+      ja:"パーセプトロンを自分で実装し、人工知能の基礎を固めた演習です。現在関心を持っているデジタル信号処理・人工知能分野への出発点になりました。",
+      en:"Hands-on work implementing a perceptron from scratch to ground myself in the basics of AI. It is the starting point for the digital signal processing and AI work I am moving toward now."},
+    stack:["Python","Jupyter","NumPy"],
+    shots:[{cap:{ko:"학습 곡선",ja:"学習曲線",en:"Learning curve"}},
+           {cap:{ko:"구현 노트",ja:"実装ノート",en:"Implementation notes"}}]
+  },
+  android:{
+    route:"/works/android-projects", status:"200 OK", type:"repository",
+    link:"https://github.com/suheon927/AndroidStudioProjects",
+    title:{ko:"Android Projects",ja:"Android Projects",en:"Android Projects"},
+    meta:{ko:"Java · Android Studio",ja:"Java · Android Studio",en:"Java · Android Studio"},
+    desc:{
+      ko:"Android Studio 기반 Java 앱 개발 실습 모음. 화면 구성과 생명주기, 이벤트 처리를 다루며 모바일 클라이언트 관점에서 백엔드 API가 어떻게 소비되는지를 이해하는 계기가 됐습니다.",
+      ja:"Android StudioによるJavaアプリ開発の演習集です。画面構成やライフサイクル、イベント処理を扱う中で、モバイル側からバックエンドAPIがどう利用されるかを理解するきっかけになりました。",
+      en:"A collection of Java app exercises built in Android Studio. Working through layouts, lifecycles and event handling gave me a client-side view of how backend APIs actually get consumed."},
+    stack:["Java","Android Studio"],
+    shots:[{cap:{ko:"앱 화면",ja:"アプリ画面",en:"App screens"}},
+           {cap:{ko:"기능 구현",ja:"機能実装",en:"Features"}}]
+  },
+  minigames:{
+    route:"/works/mini-games", status:"200 OK", type:"repository",
+    link:"https://github.com/suheon927/MiniGames",
+    title:{ko:"Mini Games",ja:"Mini Games",en:"Mini Games"},
+    meta:{ko:"C · 시스템 프로그래밍 기초",ja:"C · システムプログラミング基礎",en:"C · systems programming basics"},
+    desc:{
+      ko:"C 언어로 만든 콘솔 미니게임 모음. 포인터와 메모리를 직접 다루면서 시스템 프로그래밍의 기초를 익혔고, 알고리즘과 자료구조를 실제 코드로 옮기는 연습이 됐습니다.",
+      ja:"C言語で作ったコンソールミニゲーム集です。ポインタとメモリを直接扱いながらシステムプログラミングの基礎を学び、アルゴリズムとデータ構造を実際のコードに落とす練習になりました。",
+      en:"Console mini-games written in C. Handling pointers and memory directly taught me the basics of systems programming and gave me practice turning algorithms and data structures into working code."},
+    stack:["C","Unix"],
+    shots:[{cap:{ko:"게임 화면",ja:"ゲーム画面",en:"Gameplay"}},
+           {cap:{ko:"소스 구조",ja:"ソース構成",en:"Source layout"}}]
   },
   tracker:{
     route:"/works/job-tracker", status:"200 OK", type:"system",
-    title:"Job Tracker",
-    desc:"일본 취업 준비를 위해 직접 설계한 지원 관리 데이터베이스. 기업별 전형 단계, 마감일, 제출 서류를 한눈에 추적할 수 있도록 구조화했습니다. Lotte, SUBARU, Casio, Teamlab 등의 지원 현황을 관리하고 있습니다.",
-    stack:["Notion","Database Design"],
-    shots:[{cap:"전형 보드"},{cap:"마감일 뷰"}]
+    title:{ko:"Job Tracker",ja:"Job Tracker",en:"Job Tracker"},
+    meta:{ko:"Notion · 일본 취업 관리",ja:"Notion · 就職活動の管理",en:"Notion · Japan job search"},
+    desc:{
+      ko:"일본 취업 준비를 위해 직접 설계한 지원 관리 데이터베이스. 기업별 전형 단계, 마감일, 제출 서류를 한눈에 추적할 수 있도록 구조화했습니다. Lotte, SUBARU, Casio, Teamlab 등의 지원 현황을 관리하고 있습니다.",
+      ja:"日本での就職活動のために自分で設計した応募管理データベースです。企業ごとの選考段階・締切・提出書類を一目で追えるように構造化しました。Lotte、SUBARU、Casio、Teamlabなどの応募状況を管理しています。",
+      en:"An application-tracking database I designed for my job search in Japan. It is structured so I can see each company's stage, deadlines and required documents at a glance — currently tracking applications to Lotte, SUBARU, Casio, Teamlab and others."},
+    stack:["Notion",{ko:"DB 설계",ja:"DB設計",en:"Database Design"}],
+    shots:[{cap:{ko:"전형 보드",ja:"選考ボード",en:"Pipeline board"}},
+           {cap:{ko:"마감일 뷰",ja:"締切ビュー",en:"Deadline view"}}]
   }
 };
+/* 언어별 값을 꺼내는 헬퍼 — 문자열이면 그대로, 객체면 현재 언어 */
+const L=(v)=>typeof v==='string'?v:(v&&(v[LANG]||v.ko||v.en))||'';
+/* 검색은 모든 언어를 대상으로 — 어떤 언어로 검색해도 찾히도록 */
+const allLang=(v)=>typeof v==='string'?v:(v?Object.values(v).join(' '):'');
+/* UI 문구를 현재 언어로 — 동적으로 만드는 요소에서 사용 */
+const T=(key)=>((I18N[LANG]||I18N.ko)[key])||((I18N.ko)[key])||'';
 
 /* =====================================================
    i18n — 언어 전환 (KO 완성, JA/EN은 채워 넣는 자리)
    ===================================================== */
 const I18N={
   ko:{
-    heroRole:"Backend Engineer", heroEdu:"동국대 컴퓨터공학 · 도쿄도시대 교환", heroOpen:"일본 취업 준비 중 · 2026", heroScroll:"아래로",
+    sAbout:"소개", sStack:"기술 스택", sShot:"스크린샷", sSource:"소스", openNotion:"Notion에서 보기", openRepo:"저장소 열기", repoBtn:"GitHub 저장소 보기", notionBtn:"Notion에서 보기",
+    heroRole:"IT Engineer", heroEdu:"동국대학교 컴퓨터공학과", heroOpen:"일본 취업 준비 중 · 2026", heroScroll:"아래로",
     storyTap:"좌우 탭으로 이동", storyDown:"↓ 당겨서 닫기", tapZoom:"탭하면 크게 보기",
     searchPh:"키워드로 검색 (java, coffee, 도쿄, 2021…)", notFound:"일치하는 항목이 없습니다.",
     awardsWord:"수상", awHead1:"고등학교 재학 중 수상", awHead2:"연도순 타임라인 · 좌우로 넘겨보세요", stripHint:"스크롤 · 드래그 · 방향키",
-    portfolioOf:"Portfolio of", role:"Backend<br>Engineer",
+    portfolioOf:"Portfolio of", role:"IT<br>Engineer",
     openTo:"일본 취업 준비 중 · 2026",
     server:"server: running",
     introL2:"// 아래 엔드포인트를 호출(클릭)하면 각 프로젝트가 응답합니다.",
@@ -1780,19 +1916,20 @@ const I18N={
     fIssuer:"수여 기관", fYear:"연도", fField:"분야",
     addShot:"스크린샷 추가",
     aboutTag:"GET /about — 200 OK",
-    aboutH:"백엔드 엔지니어,<br><em>서울 → 도쿄.</em>",
-    aboutP1:"동국대학교 WISE캠퍼스 컴퓨터공학과 4학년. 도쿄도시대학 정보공학부에서 교환 학생으로 1년을 보내며 일본에서 일하겠다는 방향을 굳혔고, 지금은 일본 취업을 준비하고 있습니다.",
+    aboutH:"IT 엔지니어,<br><em>부산 → 일본.</em>",
+    aboutP1:"부산에서 나고 자라 동국대학교 WISE캠퍼스 컴퓨터공학과에 재학 중인 4학년입니다. 도쿄도시대학에서 교환 학생으로 1년을 보내며 일본에서 일하겠다는 방향을 굳혔고, 지금은 일본 취업을 준비하고 있습니다.",
     aboutP2:"Java와 Spring Boot로 백엔드를 개발합니다. 6인 팀 프로젝트 Stack Snapshot에서 백엔드를 맡아 실제 행사에서 운영되는 서비스를 만들었고, 2024 경주 지역문제 해결 해커톤에서는 팀 Null의 백엔드로 종합 2위를 수상했습니다. 지금은 알고리즘과 자료구조를 다지면서 디지털 신호처리와 인공지능 쪽으로 관심을 넓히고 있습니다.",
-    fEducation:"학력", fExchange:"교환 학생", fFocus:"주력 분야", fAward:"수상",
-    vEducation:"동국대학교 WISE캠퍼스 컴퓨터공학과", vExchange:"도쿄도시대학 정보공학부",
-    vFocus:"Java · Spring Boot · Backend", vAward:"2024 경주 해커톤 종합 2위"
+    fEducation:"학력", fFocus:"주력 분야", fAward:"수상",
+    vEducation:"동국대학교 WISE캠퍼스 컴퓨터공학과",
+    vFocus:"Java · Spring Boot · 백엔드", vAward:"2024 경주 해커톤 종합 2위"
   },
   ja:{
-    heroRole:"Backend Engineer", heroEdu:"東国大 コンピュータ工学 · 東京都市大 交換留学", heroOpen:"日本での就職活動中 · 2026", heroScroll:"スクロール",
+    sAbout:"紹介", sStack:"技術スタック", sShot:"スクリーンショット", sSource:"ソース", openNotion:"Notionで見る", openRepo:"リポジトリを開く", repoBtn:"GitHubリポジトリを見る", notionBtn:"Notionで見る",
+    heroRole:"IT Engineer", heroEdu:"東国大学校 コンピュータ工学科", heroOpen:"日本での就職活動中 · 2026", heroScroll:"スクロール",
     storyTap:"左右タップで移動", storyDown:"↓ 引いて閉じる", tapZoom:"タップで拡大",
     searchPh:"キーワードで検索 (java, coffee, 東京, 2021…)", notFound:"一致する項目がありません。",
     awardsWord:"受賞", awHead1:"高校在学中の受賞", awHead2:"年代順タイムライン · 左右にスワイプ", stripHint:"スクロール · ドラッグ · 矢印キー",
-    portfolioOf:"Portfolio of", role:"Backend<br>Engineer",
+    portfolioOf:"Portfolio of", role:"IT<br>Engineer",
     openTo:"日本での就職活動中 · 2026",
     server:"server: running",
     introL2:"// 下のエンドポイントをクリックすると、各プロジェクトが応答します。",
@@ -1801,19 +1938,20 @@ const I18N={
     fIssuer:"授与機関", fYear:"年度", fField:"分野",
     addShot:"スクリーンショットを追加",
     aboutTag:"GET /about — 200 OK",
-    aboutH:"バックエンドエンジニア、<br><em>ソウル → 東京。</em>",
-    aboutP1:"[ここに日本語の自己紹介を入力してください。]",
-    aboutP2:"[ここに日本語の自己紹介を入力してください。]",
-    fEducation:"学歴", fExchange:"交換留学", fFocus:"専門分野", fAward:"受賞",
-    vEducation:"東国大学校 WISEキャンパス コンピュータ工学科", vExchange:"東京都市大学 情報工学部",
-    vFocus:"Java · Spring Boot · Backend", vAward:"ハッカソン準優勝"
+    aboutH:"ITエンジニア、<br><em>釜山 → 日本。</em>",
+    aboutP1:"釜山出身、東国大学校WISEキャンパス コンピュータ工学科の4年生です。東京都市大学での1年間の交換留学を通じて日本で働くという進路を固め、現在は日本での就職活動を進めています。",
+    aboutP2:"JavaとSpring Bootでバックエンドを開発しています。6人チームのプロジェクトStack Snapshotではバックエンドを担当し、実際のイベントで運用されるサービスを作りました。2024年の慶州地域課題解決ハッカソンではチームNullのバックエンドとして総合2位を受賞しました。現在はアルゴリズムとデータ構造を固めながら、デジタル信号処理と人工知能の分野へ関心を広げています。",
+    fEducation:"学歴", fFocus:"専門分野", fAward:"受賞",
+    vEducation:"東国大学校 WISEキャンパス コンピュータ工学科",
+    vFocus:"Java · Spring Boot · 백엔드", vAward:"ハッカソン準優勝"
   },
   en:{
-    heroRole:"Backend Engineer", heroEdu:"Dongguk Univ. CE · Tokyo City Univ. exchange", heroOpen:"Open to work in Japan · 2026", heroScroll:"scroll",
+    sAbout:"About", sStack:"Tech Stack", sShot:"Screenshot", sSource:"Source", openNotion:"Open in Notion", openRepo:"Open repository", repoBtn:"View GitHub repo", notionBtn:"Open in Notion",
+    heroRole:"IT Engineer", heroEdu:"Dongguk University, Computer Engineering", heroOpen:"Open to work in Japan · 2026", heroScroll:"scroll",
     storyTap:"tap sides to move", storyDown:"↓ pull to close", tapZoom:"tap to enlarge",
     searchPh:"Search by keyword (java, coffee, tokyo, 2021…)", notFound:"No matching entries.",
     awardsWord:"AWARDS", awHead1:"Earned during high school", awHead2:"Chronological timeline · swipe through", stripHint:"scroll · drag · arrow keys",
-    portfolioOf:"Portfolio of", role:"Backend<br>Engineer",
+    portfolioOf:"Portfolio of", role:"IT<br>Engineer",
     openTo:"Open to work in Japan · 2026",
     server:"server: running",
     introL2:"// Click an endpoint below and each project responds.",
@@ -1822,13 +1960,12 @@ const I18N={
     fIssuer:"Issuer", fYear:"Year", fField:"Field",
     addShot:"Add screenshot",
     aboutTag:"GET /about — 200 OK",
-    aboutH:"Backend engineer,<br><em>Seoul → Tokyo.</em>",
-    aboutP1:"[Write your English introduction here.]",
-    aboutP2:"[Write your English introduction here.]",
-    fEducation:"Education", fExchange:"Exchange", fFocus:"Focus", fAward:"Award",
+    aboutH:"IT engineer,<br><em>Busan → Japan.</em>",
+    aboutP1:"Born and raised in Busan, currently a fourth-year Computer Engineering student at Dongguk University WISE campus. A year on exchange at Tokyo City University settled my direction toward working in Japan, and I am job hunting there now.",
+    aboutP2:"I build backends with Java and Spring Boot. On Stack Snapshot I owned the backend for a six-person team and shipped a service that ran at a real event, and at the 2024 Gyeongju regional hackathon I was the backend for team Null, which placed 2nd overall. I am currently strengthening my algorithms and data structures while moving toward digital signal processing and AI.",
+    fEducation:"Education", fFocus:"Focus", fAward:"Award",
     vEducation:"Dongguk University WISE, Computer Engineering",
-    vExchange:"Tokyo City University, Information Engineering",
-    vFocus:"Java · Spring Boot · Backend", vAward:"Hackathon 2nd place"
+    vFocus:"Java · Spring Boot · 백엔드", vAward:"Hackathon 2nd place"
   }
 };
 let LANG='ko';
@@ -1849,42 +1986,71 @@ function applyLang(code,animate){
   /* 이름은 언어별 표기로 교체 (다른 표기는 아래 작게) */
   paintName(code);
   if(typeof paintHero==='function')paintHero(code);
+  /* 리스트·상장·태그는 광선이 지나간 뒤 다시 그림 */
+  const repaint=()=>{
+    if(typeof paintWorkList==='function')paintWorkList();
+    if(typeof paintAwards==='function')paintAwards();
+    if(typeof paintTags==='function')paintTags();
+  };
+  animate&&!reduced ? setTimeout(repaint,320) : repaint();
   /* 검색창 안내문도 언어에 맞게 */
   const si=document.getElementById('searchInput');
   if(si&&dict.searchPh)si.placeholder=dict.searchPh;
 
   if(!animate||reduced){paint();return;}
 
-  /* 1) 대형 언어 배지 — 어떤 언어로 바뀌었는지 확실히 보임 */
-  const L=LANG_LABEL[code]||LANG_LABEL.ko;
-  langBadge.querySelector('.code').textContent=L.code;
-  langBadge.querySelector('.label').textContent=L.label;
-  /* 상장 화면에서는 카드·설명과 겹치지 않게 작게 */
+  /* 이전 전환이 진행 중이면 즉시 확정 — 글자가 사라진 채 남지 않도록 */
+  settleScrambles();
+
+  /* 1) 대형 언어 배지 */
+  const Lb=LANG_LABEL[code]||LANG_LABEL.ko;
+  langBadge.querySelector('.code').textContent=Lb.code;
+  langBadge.querySelector('.label').textContent=Lb.label;
   langBadge.classList.toggle('compact',awards.classList.contains('open'));
   langBadge.classList.remove('run'); void langBadge.offsetWidth;
   langBadge.classList.add('run');
-  /* 2) 스윕 라이트 */
+
+  /* 2) 대각선 광선 + 스윕 */
   langSweep.classList.remove('run'); void langSweep.offsetWidth;
   langSweep.classList.add('run');
+  const beam=document.getElementById('langBeam');
+  if(beam){beam.classList.remove('run'); void beam.offsetWidth; beam.classList.add('run');}
+
   /* 3) 본문 블러 펄스 */
   ['smooth','detail','about','awards'].forEach(id=>{
     const el=document.getElementById(id);
     if(!el)return;
     el.classList.remove('lang-shift'); void el.offsetWidth;
     el.classList.add('lang-shift');
-    setTimeout(()=>el.classList.remove('lang-shift'),950);
+    setTimeout(()=>el.classList.remove('lang-shift'),1550);
   });
-  /* 4) 텍스트 순차 해독 */
-  nodes.forEach((n,i)=>{
+
+  /* 4) 광선이 지나가는 순간에 맞춰 각 글자가 바뀜 (좌상단 → 우하단) */
+  const DUR=1500, LEAD=180;
+  nodes.forEach(n=>{
     const v=dict[n.dataset.i18n];
     if(v===undefined)return;
+    const b=n.getBoundingClientRect();
+    /* 대각선 진행률: 좌상단 0 → 우하단 1 */
+    const prog=((b.left+b.width/2)/innerWidth + (b.top+b.height/2)/innerHeight)/2;
+    const delay=LEAD+Math.max(0,Math.min(1,prog))*(DUR*0.62);
     setTimeout(()=>{
+      n.classList.remove('flip'); void n.offsetWidth; n.classList.add('flip');
       if(/<[a-z]/i.test(v)){n.innerHTML=v;return;}
       n.textContent=v;
-      scramble(n,true);
-    }, 200+i*40);
+      /* 짧은 라벨만 해독 연출 — 긴 문장은 그대로 교체(가독성) */
+      if(v.length<=34)scramble(n,true);
+      else delete n.dataset.text;
+      setTimeout(()=>n.classList.remove('flip'),520);
+    }, delay);
   });
-  setTimeout(()=>scramble(document.getElementById('nameLink'),true),260);
+  /* 이름도 같은 리듬으로 */
+  const nl=document.getElementById('nameLink');
+  if(nl){
+    const b=nl.getBoundingClientRect();
+    const prog=((b.left)/innerWidth + (b.top)/innerHeight)/2;
+    setTimeout(()=>scramble(nl,true), LEAD+Math.max(0,prog)*(DUR*0.62));
+  }
 }
 document.getElementById('lang').addEventListener('click',e=>{
   const b=e.target.closest('button[data-lang]');
@@ -1896,31 +2062,41 @@ document.getElementById('lang').addEventListener('click',e=>{
   applyLang(LANG,true);
   try{localStorage.setItem('pf-lang',LANG);}catch(_){}
 });
-/* 저장된 언어 복원 */
+/* 저장된 언어 복원 — 모든 렌더 함수가 준비된 뒤 실행 */
 try{
   const saved=localStorage.getItem('pf-lang');
   if(saved&&I18N[saved]){
-    LANG=saved;document.documentElement.lang=saved;
+    LANG=saved;
+    document.documentElement.lang=saved;
     document.querySelectorAll('#lang button').forEach(x=>
       x.classList.toggle('on',x.dataset.lang===saved));
-    applyLang(saved,false);
   }
 }catch(_){}
+/* 페이지의 모든 요소가 만들어진 뒤 현재 언어를 한 번에 적용 */
+addEventListener('DOMContentLoaded',()=>applyLang(LANG,false));
+if(document.readyState!=='loading')setTimeout(()=>applyLang(LANG,false),0);
 
 /* 이름 클릭 → About */
 function paintName(code){
   const order={ko:['ko','en','ja'],ja:['ja','en','ko'],en:['en','ko','ja']}[code]||['ko','en','ja'];
-  document.getElementById('nameLink').textContent=CONFIG.name[order[0]];
-  document.getElementById('nameAlt').textContent=
-    CONFIG.name[order[1]]+' · '+CONFIG.name[order[2]];
+  const nl=document.getElementById('nameLink');
+  nl.textContent=CONFIG.name[order[0]];
+  /* 나머지 두 표기도 각각 눌러서 About으로 들어갈 수 있게 */
+  document.getElementById('nameAlt').innerHTML=
+    order.slice(1).map(k=>
+      `<a role="button" tabindex="0" class="alt-name">${CONFIG.name[k]}</a>`
+    ).join('<span class="sep"> · </span>');
 }
 paintName(LANG);
-document.getElementById('nameLink').addEventListener('click',e=>{
-  e.preventDefault();
-  document.getElementById('aboutBtn').click();
+/* 세 이름 전부 About으로 */
+function openAbout(){document.getElementById('aboutBtn').click();}
+document.querySelector('.c-tl').addEventListener('click',e=>{
+  if(e.target.closest('#nameLink, .alt-name')){e.preventDefault();openAbout();}
 });
-document.getElementById('nameLink').addEventListener('keydown',e=>{
-  if(e.key==='Enter'||e.key===' '){e.preventDefault();document.getElementById('aboutBtn').click();}
+document.querySelector('.c-tl').addEventListener('keydown',e=>{
+  if((e.key==='Enter'||e.key===' ')&&e.target.closest('#nameLink, .alt-name')){
+    e.preventDefault();openAbout();
+  }
 });
 /* 연락처 연동 */
 /* 연락처 연동 — 주소는 실행 시점에 조립 (소스에 완전한 형태로 남지 않음) */
@@ -1943,18 +2119,41 @@ gh.innerHTML='<span class="tag">Code</span>github.com/suheon927 ↗';
 /* 상장 정보를 여기서 수정하세요. img:"certs/01.jpg" 추가 시 사진이 표시됩니다.
    연도(year)를 기준으로 자동 정렬되고 연도 구분선이 들어갑니다. */
 const AWARDS=[
-  {title:"수상명 01", year:"2019", issuer:"수여 기관", field:"분야",
-   desc:"이 상을 받게 된 배경과 과정, 무엇을 배웠는지를 2~3문장으로 적어보세요. 어떤 대회였는지, 본인의 역할은 무엇이었는지, 결과가 어땠는지가 들어가면 좋습니다.",
-   note:"한 줄 코멘트 — 이 경험이 지금의 나에게 남긴 것"},
-  {title:"수상명 02", year:"2019", issuer:"수여 기관", field:"분야", desc:"설명을 입력하세요.", note:""},
-  {title:"수상명 03", year:"2020", issuer:"수여 기관", field:"분야", desc:"설명을 입력하세요.", note:""},
-  {title:"수상명 04", year:"2020", issuer:"수여 기관", field:"분야", desc:"설명을 입력하세요.", note:""},
-  {title:"수상명 05", year:"2020", issuer:"수여 기관", field:"분야", desc:"설명을 입력하세요.", note:""},
-  {title:"수상명 06", year:"2021", issuer:"수여 기관", field:"분야", desc:"설명을 입력하세요.", note:""},
-  {title:"수상명 07", year:"2021", issuer:"수여 기관", field:"분야", desc:"설명을 입력하세요.", note:""},
-  {title:"수상명 08", year:"2021", issuer:"수여 기관", field:"분야", desc:"설명을 입력하세요.", note:""},
-  {title:"수상명 09", year:"2022", issuer:"수여 기관", field:"분야", desc:"설명을 입력하세요.", note:""},
-  {title:"수상명 10", year:"2022", issuer:"수여 기관", field:"분야", desc:"설명을 입력하세요.", note:""}
+  {title:{ko:"수상명 01",ja:"受賞名 01",en:"Award 01"},
+   year:"2019",
+   issuer:{ko:"수여 기관",ja:"授与機関",en:"Issuer"},
+   field:{ko:"분야",ja:"分野",en:"Field"},
+   desc:{ko:"이 상을 받게 된 배경과 과정, 무엇을 배웠는지를 2~3문장으로 적어보세요.",
+         ja:"この賞を受けた背景と過程、何を学んだかを2〜3文で書いてください。",
+         en:"Write two or three sentences on how you earned this award and what you took from it."},
+   note:{ko:"한 줄 코멘트",ja:"一言コメント",en:"One-line note"}},
+  {title:{ko:"수상명 02",ja:"受賞名 02",en:"Award 02"}, year:"2019",
+   issuer:{ko:"수여 기관",ja:"授与機関",en:"Issuer"}, field:{ko:"분야",ja:"分野",en:"Field"},
+   desc:{ko:"설명을 입력하세요.",ja:"説明を入力してください。",en:"Add a description."}, note:""},
+  {title:{ko:"수상명 03",ja:"受賞名 03",en:"Award 03"}, year:"2020",
+   issuer:{ko:"수여 기관",ja:"授与機関",en:"Issuer"}, field:{ko:"분야",ja:"分野",en:"Field"},
+   desc:{ko:"설명을 입력하세요.",ja:"説明を入力してください。",en:"Add a description."}, note:""},
+  {title:{ko:"수상명 04",ja:"受賞名 04",en:"Award 04"}, year:"2020",
+   issuer:{ko:"수여 기관",ja:"授与機関",en:"Issuer"}, field:{ko:"분야",ja:"分野",en:"Field"},
+   desc:{ko:"설명을 입력하세요.",ja:"説明を入力してください。",en:"Add a description."}, note:""},
+  {title:{ko:"수상명 05",ja:"受賞名 05",en:"Award 05"}, year:"2020",
+   issuer:{ko:"수여 기관",ja:"授与機関",en:"Issuer"}, field:{ko:"분야",ja:"分野",en:"Field"},
+   desc:{ko:"설명을 입력하세요.",ja:"説明を入力してください。",en:"Add a description."}, note:""},
+  {title:{ko:"수상명 06",ja:"受賞名 06",en:"Award 06"}, year:"2021",
+   issuer:{ko:"수여 기관",ja:"授与機関",en:"Issuer"}, field:{ko:"분야",ja:"分野",en:"Field"},
+   desc:{ko:"설명을 입력하세요.",ja:"説明を入力してください。",en:"Add a description."}, note:""},
+  {title:{ko:"수상명 07",ja:"受賞名 07",en:"Award 07"}, year:"2021",
+   issuer:{ko:"수여 기관",ja:"授与機関",en:"Issuer"}, field:{ko:"분야",ja:"分野",en:"Field"},
+   desc:{ko:"설명을 입력하세요.",ja:"説明を入力してください。",en:"Add a description."}, note:""},
+  {title:{ko:"수상명 08",ja:"受賞名 08",en:"Award 08"}, year:"2021",
+   issuer:{ko:"수여 기관",ja:"授与機関",en:"Issuer"}, field:{ko:"분야",ja:"分野",en:"Field"},
+   desc:{ko:"설명을 입력하세요.",ja:"説明を入力してください。",en:"Add a description."}, note:""},
+  {title:{ko:"수상명 09",ja:"受賞名 09",en:"Award 09"}, year:"2022",
+   issuer:{ko:"수여 기관",ja:"授与機関",en:"Issuer"}, field:{ko:"분야",ja:"分野",en:"Field"},
+   desc:{ko:"설명을 입력하세요.",ja:"説明を入力してください。",en:"Add a description."}, note:""},
+  {title:{ko:"수상명 10",ja:"受賞名 10",en:"Award 10"}, year:"2022",
+   issuer:{ko:"수여 기관",ja:"授与機関",en:"Issuer"}, field:{ko:"분야",ja:"分野",en:"Field"},
+   desc:{ko:"설명을 입력하세요.",ja:"説明を入力してください。",en:"Add a description."}, note:""}
 ];
 
 const awards=document.getElementById('awards');
@@ -1973,46 +2172,65 @@ gaugeTrack.innerHTML=AWARDS.map((_,i)=>`<i data-g="${i}" title="${i+1}"></i>`).j
 const gauges=[...gaugeTrack.children];
 
 /* 카드 + 연도 구분자 생성 */
-let lastYear=null;
-strip.innerHTML=AWARDS.map((a,i)=>{
-  let out='';
-  if(a.year!==lastYear){
-    out+=`<span class="year-mark" aria-hidden="true">${a.year}</span>`;
-    lastYear=a.year;
-  }
-  const pic=a.img
-    ? `<img src="${a.img}" alt="${a.title}">`
-    : `<div class="body">
-         <div class="seal">${String(i+1).padStart(2,'0')}</div>
-         <div class="nm">${a.title}</div>
-         <div class="is">${a.issuer} · ${a.year}</div>
-       </div>`;
-  out+=`<article class="strip-card" data-i="${i}" tabindex="0" role="button" aria-label="${a.title}">
-    <span class="no">${String(i+1).padStart(2,'0')}</span>
-    ${pic}
-    <div class="m-text">
-      <span class="mt">${a.title}</span>
-      <span class="mi">${a.issuer} · ${a.year} · ${a.field}</span>
-    </div>
-    <div class="m-more">
-      <p>${a.desc}</p>
-      ${a.note?`<p class="mnote">${a.note}</p>`:''}
-    </div>
-  </article>`;
-  return out;
-}).join('');
-const stripCards=[...strip.querySelectorAll('.strip-card')];
+let stripCards=[];
+function buildStrip(){
+  let lastYear=null;
+  strip.innerHTML=AWARDS.map((a,i)=>{
+    let out='';
+    if(a.year!==lastYear){
+      out+=`<span class="year-mark" aria-hidden="true">${a.year}</span>`;
+      lastYear=a.year;
+    }
+    const pic=a.img
+      ? `<img src="${a.img}" alt="${L(a.title)}">`
+      : `<div class="body">
+           <div class="seal">${String(i+1).padStart(2,'0')}</div>
+           <div class="nm">${L(a.title)}</div>
+           <div class="is">${L(a.issuer)} · ${a.year}</div>
+         </div>`;
+    out+=`<article class="strip-card" data-i="${i}" tabindex="0" role="button" aria-label="${L(a.title)}">
+      <span class="no">${String(i+1).padStart(2,'0')}</span>
+      ${pic}
+      <div class="m-text">
+        <span class="mt">${L(a.title)}</span>
+        <span class="mi">${L(a.issuer)} · ${a.year} · ${L(a.field)}</span>
+      </div>
+      <div class="m-more">
+        <p>${L(a.desc)}</p>
+        ${L(a.note)?`<p class="mnote">${L(a.note)}</p>`:''}
+      </div>
+    </article>`;
+    return out;
+  }).join('');
+  stripCards=[...strip.querySelectorAll('.strip-card')];
+  /* 현재 선택 상태 복원 */
+  stripCards.forEach((c,k)=>c.classList.toggle('focus',k===awIdx));
+}
+buildStrip();
 
+/* 언어 전환 시 상장 목록 전체를 다시 그림 */
+function paintAwards(){
+  if(typeof buildStrip!=='function')return;
+  buildStrip();
+  /* 설명 패널도 강제로 다시 그림 (스크램블 캐시 초기화 포함) */
+  const idx=awIdx<0?0:awIdx;
+  ['awNo','awTitle','awMeta','awDesc','awNote'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)delete el.dataset.text;
+  });
+  renderRead(idx);
+}
 function renderRead(i){
   const a=AWARDS[i];
   document.getElementById('awNo').textContent=
     `${String(i+1).padStart(2,'0')} / ${String(N).padStart(2,'0')}`;
-  document.getElementById('awTitle').textContent=a.title;
-  document.getElementById('awMeta').textContent=`${a.issuer} · ${a.year} · ${a.field}`;
-  document.getElementById('awDesc').textContent=a.desc;
+  document.getElementById('awTitle').textContent=L(a.title);
+  document.getElementById('awMeta').textContent=`${L(a.issuer)} · ${a.year} · ${L(a.field)}`;
+  document.getElementById('awDesc').textContent=L(a.desc);
   const note=document.getElementById('awNote');
-  note.textContent=a.note||'';
-  note.style.display=a.note?'block':'none';
+  const nt=L(a.note);
+  note.textContent=nt||'';
+  note.style.display=nt?'block':'none';
   document.getElementById('gaugeNow').textContent=String(i+1).padStart(2,'0');
 }
 
@@ -2298,23 +2516,44 @@ if(!MOBILE&&!reduced){
   document.getElementById('workList').addEventListener('mouseleave',()=>setBackground('_default'));
 }
 
+/* ---------- 리스트 항목을 현재 언어로 다시 그림 ---------- */
+function paintWorkList(){
+  document.querySelectorAll('#workList a').forEach(a=>{
+    const key=a.dataset.detail;
+    if(!key||!P[key])return;
+    const p=P[key];
+    const h3=a.querySelector('h3');
+    const meta=a.querySelector('.meta');
+    if(h3){h3.textContent=L(p.title);delete h3.dataset.orig;delete h3.dataset.text;}
+    if(meta)meta.textContent=L(p.meta);
+  });
+}
+paintWorkList();
+
 /* ---------- 상단 히어로 ---------- */
 const heroName=document.getElementById('heroName');
 const heroSub=document.getElementById('heroSub');
 const heroScroll=document.getElementById('heroScroll');
 const heroInner=document.getElementById('heroInner');
 
-/* 이름을 글자 단위로 쪼개서 하나씩 떠오르게 */
+/* 이름을 글자 단위로 쪼개서 하나씩 떠오르게
+   1행: 선택한 언어의 표기 (주인공) / 2행: 라틴 알파벳 표기를 윤곽선으로
+   — 영어를 고르면 반대로 라틴이 주인공, 한글이 윤곽선 */
 function paintHero(code){
-  const nm=CONFIG.name[code]||CONFIG.name.en;
-  /* 첫 줄: 현재 언어 이름 / 둘째 줄: 영문 표기(윤곽선) */
-  const line1=nm;
-  const line2=(code==='en')?CONFIG.name.ko:CONFIG.name.en;
+  const N=CONFIG.name;
+  const pair={
+    ko:[N.ko, N.en],   // 이수헌 / YI SUHEON
+    ja:[N.ja, N.en],   // イスウホン / YI SUHEON
+    en:[N.en, N.ko]    // YI SUHEON / 이수헌
+  }[code]||[N.ko,N.en];
+  const [line1,line2]=pair;
   const wrap=(txt,outline)=>
     `<span class="${outline?'outline':''}" style="display:flex;flex-wrap:wrap;gap:0 .04em">`+
     [...txt].map(c=>`<span class="ch">${c===' '?'&nbsp;':c}</span>`).join('')+
     `</span>`;
   heroName.innerHTML=wrap(line1,false)+wrap(line2,true);
+  /* 라틴 문자는 폭이 넓어 두 줄 크기를 다르게 — 균형 잡기 */
+  heroName.classList.toggle('latin-first',code==='en');
   const chars=[...heroName.querySelectorAll('.ch')];
   chars.forEach((c,i)=>{
     c.classList.remove('in');
@@ -2334,8 +2573,25 @@ const noResult=document.getElementById('noResult');
 const workItems=[...document.querySelectorAll('#workList li')];
 
 /* 추천 키워드 칩 */
-const TAGS=['Java','Spring Boot','Python','C','Award','Tokyo','Notion'];
-searchTags.innerHTML=TAGS.map(t=>`<button data-tag="${t}">${t}</button>`).join('');
+/* 검색 추천 키워드 — 언어별로 통일된 방향성 */
+const TAG_SETS={
+  ko:['자바','스프링','파이썬','백엔드','수상','도쿄','노션'],
+  ja:['Java','Spring','Python','バックエンド','受賞','東京','Notion'],
+  en:['Java','Spring','Python','Backend','Award','Tokyo','Notion']
+};
+/* 표시용 키워드 → 실제 검색어 매핑 (어떤 언어로 눌러도 같은 결과) */
+const TAG_QUERY={
+  '자바':'java','스프링':'spring','파이썬':'python','백엔드':'backend',
+  '수상':'award','도쿄':'tokyo','노션':'notion',
+  'バックエンド':'backend','受賞':'award','東京':'tokyo'
+};
+let TAGS=TAG_SETS[LANG]||TAG_SETS.ko;
+function paintTags(){
+  TAGS=TAG_SETS[LANG]||TAG_SETS.ko;
+  searchTags.innerHTML=TAGS.map(t=>
+    `<button data-tag="${TAG_QUERY[t]||t.toLowerCase()}">${t}</button>`).join('');
+}
+paintTags();
 
 /* 각 항목의 검색 대상 텍스트를 미리 모아둠 (제목·경로·설명·스택·연도) */
 workItems.forEach(li=>{
@@ -2345,7 +2601,7 @@ workItems.forEach(li=>{
   const parts=[
     li.innerText,
     a.dataset.awards?'awards 상장 수상 award 고등학교':'',
-    p?[p.title,p.desc,p.route,p.type,(p.stack||[]).join(' ')].join(' '):''
+    p?[allLang(p.title),allLang(p.desc),allLang(p.meta),p.route,p.type,(p.stack||[]).map(allLang).join(' ')].join(' '):''
   ];
   if(a.dataset.awards){
     parts.push(AWARDS.map(x=>[x.title,x.issuer,x.field,x.year,x.desc].join(' ')).join(' '));
@@ -2474,12 +2730,12 @@ function buildStory(p){
   slides.push(`
     <div class="story-slide">
       <span class="kicker">${p.type}</span>
-      <h2>${p.title}</h2>
+      <h2>${L(p.title)}</h2>
       <div class="res"><b>HTTP/1.1 ${p.status}</b>
 GET ${p.route}</div>
     </div>`);
   /* 2) 설명 (길면 두 장으로 나눔) */
-  const sentences=p.desc.split(/(?<=[.。])\s+/).filter(Boolean);
+  const sentences=L(p.desc).split(/(?<=[.。])\s+/).filter(Boolean);
   const chunks=[];
   let buf='';
   sentences.forEach(s=>{
@@ -2490,7 +2746,7 @@ GET ${p.route}</div>
   chunks.forEach((c,i)=>{
     slides.push(`
       <div class="story-slide">
-        <span class="kicker">${t.aboutTag?'':''}About ${i+1}/${chunks.length}</span>
+        <span class="kicker">${T('sAbout')} ${i+1}/${chunks.length}</span>
         <p>${c}</p>
       </div>`);
   });
@@ -2498,19 +2754,19 @@ GET ${p.route}</div>
   if(p.stack&&p.stack.length){
     slides.push(`
       <div class="story-slide">
-        <span class="kicker">Tech Stack</span>
-        <div class="story-stack">${p.stack.map(s=>`<span>${s}</span>`).join('')}</div>
+        <span class="kicker">${T('sStack')}</span>
+        <div class="story-stack">${p.stack.map(s=>`<span>${L(s)}</span>`).join('')}</div>
       </div>`);
   }
   /* 4) 스크린샷 — 한 장씩 */
   (p.shots||[]).forEach((s,i)=>{
     const body=s.img
-      ? `<img src="${s.img}" alt="${s.cap}">`
-      : `<div class="frame"><div class="plus">+</div><small>${t.addShot||'스크린샷 추가'}</small></div>`;
+      ? `<img src="${s.img}" alt="${L(s.cap)}">`
+      : `<div class="frame"><div class="plus">+</div><small>${T('addShot')}</small></div>`;
     slides.push(`
       <div class="story-slide">
-        <span class="kicker">Screenshot ${i+1}/${p.shots.length}</span>
-        <div class="story-shot" data-zoom="${i}">${body}<div class="cap">${s.cap}</div></div>
+        <span class="kicker">${T('sShot')} ${i+1}/${p.shots.length}</span>
+        <div class="story-shot" data-zoom="${i}">${body}<div class="cap">${L(s.cap)}</div></div>
         <p class="zoom-hint" data-i18n="tapZoom">탭하면 크게 보기</p>
       </div>`);
   });
@@ -2519,10 +2775,10 @@ GET ${p.route}</div>
     const isNotion=p.link.includes('notion');
     slides.push(`
       <div class="story-slide">
-        <span class="kicker">Source</span>
+        <span class="kicker">${T('sSource')}</span>
         <h2>${isNotion?'Notion':'GitHub'}</h2>
         <a class="story-link" href="${p.link}" target="_blank" rel="noopener">
-          ${isNotion?'Notion 에서 보기':'저장소 열기'} ↗
+          ${isNotion?T('openNotion'):T('openRepo')} ↗
         </a>
       </div>`);
   }
@@ -2600,7 +2856,7 @@ story.addEventListener('click',e=>{
   e.stopPropagation();
   shotZoomBody.innerHTML=sh.querySelector('img')
     ? sh.querySelector('img').outerHTML
-    : '<div class="frame"><div style="font-size:28px">+</div><small>스크린샷 추가</small></div>';
+    : `<div class="frame"><div style="font-size:28px">+</div><small>${T('addShot')}</small></div>`;
   shotZoom.classList.add('on');
 });
 function closeZoom(){shotZoom.classList.remove('on');}
@@ -2617,23 +2873,23 @@ function openDetail(key,clickedA){
   const p=P[key];
   const resHead=document.getElementById('resHead');
   resHead.innerHTML='';
-  document.querySelector('#detailTitle .line').textContent=p.title;
-  document.getElementById('detailDesc').textContent=p.desc;
+  document.querySelector('#detailTitle .line').textContent=L(p.title);
+  document.getElementById('detailDesc').textContent=L(p.desc);
   const dl=document.getElementById('detailLink');
   if(p.link){
     dl.href=p.link;
-    dl.textContent=(p.link.includes('notion')?'Notion 에서 보기':'GitHub 저장소 보기')+' ↗';
+    dl.textContent=(p.link.includes('notion')?T('notionBtn'):T('repoBtn'))+' ↗';
     dl.classList.add('on');
   }else{
     dl.classList.remove('on');dl.removeAttribute('href');
   }
-  document.getElementById('detailStack').innerHTML=p.stack.map(s=>`<span>${s}</span>`).join('');
+  document.getElementById('detailStack').innerHTML=p.stack.map(s=>`<span>${L(s)}</span>`).join('');
   document.getElementById('detailShots').innerHTML=
     p.shots.map(s=>{
       const body=s.img
-        ? `<img src="${s.img}" alt="${s.cap}">`
-        : `<div class="frame"><div class="plus">+</div><small data-i18n="addShot">스크린샷 추가</small></div>`;
-      return `<figure class="shot">${body}<figcaption class="cap">${s.cap}</figcaption></figure>`;
+        ? `<img src="${s.img}" alt="${L(s.cap)}">`
+        : `<div class="frame"><div class="plus">+</div><small>${T('addShot')}</small></div>`;
+      return `<figure class="shot">${body}<figcaption class="cap">${L(s.cap)}</figcaption></figure>`;
     }).join('');
   lastFocus=document.activeElement;
 
