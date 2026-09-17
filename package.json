@@ -1,0 +1,10 @@
+{
+  "name": "suheon-portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/check.mjs"
+  },
+  "engines": {"node": ">=22"}
+}

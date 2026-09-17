@@ -1,0 +1,359 @@
+{
+  "locale": "en",
+  "name": "Yi Suheon",
+  "meta": {
+    "title": "Yi Suheon — Software Developer",
+    "description": "Independent developer of UP-Dream, UP-Dream Admin, and Naerim. Explore released apps, native interfaces, shared APIs, and the engineering decisions behind them."
+  },
+  "nav": {
+    "work": "Work",
+    "engineering": "Engineering",
+    "about": "About",
+    "contact": "Contact",
+    "language": "Choose language",
+    "menu": "Open navigation",
+    "closeMenu": "Close navigation",
+    "skip": "Skip to content",
+    "home": "Home"
+  },
+  "hero": {
+    "kicker": "Software developer · Korea → Japan",
+    "title": "From an everyday need\nto an app people can use.",
+    "body": "I’m Yi Suheon. I plan, design, develop, and release iOS apps and the services behind them. My work connects native interfaces with careful data handling and practical daily workflows.",
+    "primary": "Explore my work",
+    "secondary": "View GitHub",
+    "facts": [
+      {
+        "value": "03",
+        "label": "Apps released on the App Store"
+      },
+      {
+        "value": "01",
+        "label": "Developer, from planning to release"
+      },
+      {
+        "value": "1 year",
+        "label": "Exchange at Tokyo City University"
+      }
+    ]
+  },
+  "work": {
+    "kicker": "01 / Selected work",
+    "title": "Built for real routines.",
+    "intro": "Two product families, three released apps. Each case study connects the interface to the decisions behind it.",
+    "open": "Explore the project",
+    "store": "App Store",
+    "technical": "Technical overview",
+    "back": "All projects",
+    "roleLabel": "My role",
+    "role": "Independent planning, design, development, and release",
+    "stackLabel": "Core stack",
+    "screens": "Inside the app",
+    "screenNote": "Development and review captures with synthetic demo data. Dates are shown below; later App Store builds may look different.",
+    "fullImage": "View full-size image",
+    "closeImage": "Close image",
+    "architecture": "How it fits together",
+    "decisions": "Decisions behind the interface",
+    "ai": "How I used AI",
+    "rights": "Bible text: permission and delivery",
+    "evidence": "Code and verification",
+    "next": "More work",
+    "capture": "Captured",
+    "sourceCode": "Source code",
+    "tests": "Tests and CI",
+    "snapshotNote": "Engineering details reflect source reviewed on September 17, 2026. App Store releases may contain an earlier subset.",
+    "homeScreenNote": "Screenshots use synthetic demo data. Project pages include capture dates and full-size views."
+  },
+  "projects": [
+    {
+      "id": "updream",
+      "name": "UP-Dream",
+      "eyebrow": "Community member app",
+      "tagline": "A place for community, reflection, and the next small step.",
+      "description": "A member app for a church community, bringing attendance, announcements, schedules, reservations, personal reflection, and Bible reading into one place. I built the mobile experience and its shared backend, alongside a separate administrator app.",
+      "stack": [
+        "TypeScript",
+        "React Native",
+        "Expo",
+        "PostgreSQL"
+      ],
+      "store": "https://apps.apple.com/kr/app/id6797694035",
+      "technical": "https://github.com/suheon927/suheon927/blob/main/docs/updream.md#member-app",
+      "cover": "updream-growth.png",
+      "screens": [
+        {
+          "file": "updream-growth.png",
+          "title": "Reflection, made visible",
+          "alt": "UP-Dream monthly gratitude and Bible-reflection records with synthetic demo data",
+          "body": "Review gratitude and Bible-reflection (QT) entries by date and return to the relevant recording flow.",
+          "date": "2026-08-22"
+        },
+        {
+          "file": "updream-bible.png",
+          "title": "A considered reading experience",
+          "alt": "UP-Dream Bible entry with chapter navigation, bookmarks, and copyright information",
+          "body": "Choose a book and chapter, return to bookmarks, and read the copyright and permission notice.",
+          "date": "2026-08-22"
+        }
+      ],
+      "flow": [
+        "React Native member app",
+        "Authenticated TypeScript API",
+        "PostgreSQL · private S3"
+      ],
+      "flowNote": "Member and administrator clients share the backend. Database records and licensed Bible text have separate storage and access boundaries.",
+      "decisions": [
+        {
+          "title": "Recover a session without losing trust",
+          "body": "Startup distinguishes temporary connection failures from invalid credentials. Refreshes can retain the last useful screen, while account or permission changes discard old data and invalidate delayed responses."
+        },
+        {
+          "title": "Make concurrent attendance edits explicit",
+          "body": "Attendance writes use an expected version to detect conflicting edits. The server rechecks authority after acquiring a workflow lock, and commits the record, revision, and audit history together."
+        },
+        {
+          "title": "Refresh through the permission boundary",
+          "body": "Realtime messages signal that something changed. Clients fetch the actual records again through the API so current permissions apply. Coalescing and short jitter windows limit redundant requests."
+        }
+      ],
+      "ai": [
+        "I used Claude Code and Codex for scoped frontend work and integration. In the general-member faith-garden update, Claude Code prepared the initial growth and mission-screen changes; Codex handled the home screen, shared theme, calendar and reading-flow refinements, and integration checks.",
+        "ImageGen supplied static garden and mission-letter illustrations. Text, buttons, record indicators, and interactions remain native React Native elements. The screenshots here show the earlier interface for young-adult members. I define the product requirements and release scope."
+      ],
+      "rights": [
+        "I handled the copyright review and the work to secure permission for the Korean 개역개정 translation used in UP-Dream. The project checklist records permission confirmation. Copyright remains with the Korean Bible Society, and the supporting documents are retained privately.",
+        "The reader provides all 66 books to approved members. The full text stays outside the app bundle and public repository, is delivered from private AWS S3 through an authenticated API, and is checked for integrity. The app displays copyright notices and uses an account-specific temporary cache that is cleared on logout and account changes."
+      ],
+      "evidence": "The technical overview documents source boundaries, design trade-offs, and dated test results, including session recovery, cache isolation, and concurrent writes."
+    },
+    {
+      "id": "updream-admin",
+      "name": "UP-Dream Admin",
+      "eyebrow": "Native operations app",
+      "tagline": "The right tools for the people looking after a community.",
+      "description": "A native iPhone and iPad app for membership approvals, attendance, and daily operations. I brought the service’s administrative workflows to SwiftUI, with a separate administrator session and server-controlled capabilities.",
+      "stack": [
+        "Swift",
+        "SwiftUI",
+        "URLSession",
+        "Keychain"
+      ],
+      "store": "https://apps.apple.com/kr/app/id6810673532",
+      "technical": "https://github.com/suheon927/suheon927/blob/main/docs/updream.md#administrator-app",
+      "cover": "updream-admin-overview.png",
+      "screens": [
+        {
+          "file": "updream-admin-overview.png",
+          "title": "Daily operations on iPhone",
+          "alt": "UP-Dream Admin iPhone overview with synthetic approval and attendance counts",
+          "body": "Outstanding approvals, attendance summaries, and shortcuts provide entry points into daily work. All displayed figures are test fixtures.",
+          "date": "2026-09-10"
+        },
+        {
+          "file": "updream-admin-ipad.png",
+          "title": "A larger view on iPad",
+          "alt": "UP-Dream Admin iPad operations overview with synthetic test data",
+          "body": "The same operational information uses the larger display. Counts illustrate the interface and are not service usage metrics.",
+          "date": "2026-09-10"
+        }
+      ],
+      "flow": [
+        "SwiftUI administrator app",
+        "Capability-checked shared API",
+        "PostgreSQL domain records"
+      ],
+      "flowNote": "The interface reflects server-provided capabilities. The API checks authorization again when reading or changing records.",
+      "decisions": [
+        {
+          "title": "Keep administrator sessions separate",
+          "body": "Device-only Keychain storage and an ephemeral URLSession reduce retained session data. Relaunching the app requires fresh authorized reads instead of restoring a persistent offline management cache."
+        },
+        {
+          "title": "Reject responses from a previous session",
+          "body": "Requests capture a session generation. A delayed response is discarded when it belongs to an earlier session or permission scope."
+        },
+        {
+          "title": "Preserve the meaning of attendance data",
+          "body": "Unmarked records remain distinct from absences. Attendance analysis requires enough observation history before classifying a change, while conflicting edits have an explicit outcome."
+        }
+      ],
+      "ai": [
+        "I used AI assistance for the SwiftUI frontend, including screen implementation and presentation. I defined the operational workflows and interface requirements."
+      ],
+      "rights": [],
+      "evidence": "The technical overview connects native session handling, API authorization, and attendance behavior to selected XCTest and policy checks. It distinguishes executed checks from source review."
+    },
+    {
+      "id": "naerim",
+      "name": "Naerim · 내림",
+      "eyebrow": "Native coffee journal",
+      "tagline": "Remember what made this cup worth making again.",
+      "description": "A native coffee journal for recording brews, keeping recipes, and comparing the conditions behind each cup. I built and released the app for iPhone and iPad, with Korean, English, and Japanese localization.",
+      "stack": [
+        "Swift",
+        "SwiftUI",
+        "SwiftData",
+        "WidgetKit"
+      ],
+      "store": "https://apps.apple.com/kr/app/id6808134502",
+      "technical": "https://github.com/suheon927/suheon927/blob/main/docs/naerim.md",
+      "cover": "naerim-brewing.png",
+      "screens": [
+        {
+          "file": "naerim-preparation.png",
+          "title": "Prepare another cup",
+          "alt": "Naerim preparation with sample beans, recipe, grinder setting, dose, water, and temperature",
+          "body": "Reuse earlier settings and change the variables that matter for this cup. Optional measurements stay separate from zero values.",
+          "date": "2026-09-07"
+        },
+        {
+          "file": "naerim-brewing.png",
+          "title": "Follow the brewing plan",
+          "alt": "Naerim active brew timer, current pour target, and planned water graph",
+          "body": "Keep elapsed time, the current pour target, and the planned water sequence together during brewing.",
+          "date": "2026-09-05"
+        },
+        {
+          "file": "naerim-history.png",
+          "title": "Learn from the last cup",
+          "alt": "Naerim searchable brew history with sample conditions, ratings, and equipment",
+          "body": "Search previous brews and inspect the conditions and ratings recorded for each one.",
+          "date": "2026-09-05"
+        }
+      ],
+      "flow": [
+        "SwiftUI · editable value drafts",
+        "Session coordinator · repositories",
+        "SwiftData · JSON checkpoints"
+      ],
+      "flowNote": "The interface edits value types. Repositories own persistence, while a shared coordinator manages an active or unsaved brew across app windows.",
+      "decisions": [
+        {
+          "title": "Keep the past independent of the catalog",
+          "body": "A brew captures its recipe and equipment values as a historical snapshot. Editing or deleting catalog entries does not redefine the conditions of an earlier cup."
+        },
+        {
+          "title": "Recover unfinished work",
+          "body": "A monotonic clock tracks elapsed time and atomic JSON checkpoints support relaunch recovery. Saving a result and removing its checkpoint are reconciled so a retry can recognize an already stored brew."
+        },
+        {
+          "title": "Validate before replacing the draft",
+          "body": "Recipe scaling checks overflow, non-finite values, and rounding residuals before producing a replacement. A failed adjustment preserves the original draft. This case is available as a standalone Swift package."
+        }
+      ],
+      "ai": [
+        "I used Codex for bounded development tasks. For the brew-entry refinement, I requested a simpler flow based on individually selected measurements. The implementation preserved missing values, target versus actual water amounts, and the separation between new drafts and previous results.",
+        "I define product behavior, choose which changes to accept, and own release decisions. Builds, XCTest results, UI checks, and source snapshots document what was verified. Brewing and comparison use native Swift data and calculation logic."
+      ],
+      "rights": [],
+      "evidence": "The public recipe-validation package has 14 passing tests, including 324 deterministic ratio-and-target combinations, and a successful GitHub Actions run. The full app’s separate, dated verification is documented in its technical overview."
+    }
+  ],
+  "engineering": {
+    "kicker": "02 / Engineering",
+    "title": "Technology, with a purpose.",
+    "intro": "The tools I use, connected to work you can inspect.",
+    "groups": [
+      {
+        "title": "Native interfaces",
+        "tech": "Swift · SwiftUI · Observation",
+        "body": "Naerim and UP-Dream Admin; native integrations in the Expo member app."
+      },
+      {
+        "title": "Data that keeps its meaning",
+        "tech": "SwiftData · Foundation · SQL",
+        "body": "Historical brew snapshots, explicit saves, session recovery, and transactional attendance changes."
+      },
+      {
+        "title": "Connected services",
+        "tech": "TypeScript · React Native · React · PostgreSQL",
+        "body": "The UP-Dream member app, web administration, shared API, and permission-aware data access."
+      },
+      {
+        "title": "Delivery and verification",
+        "tech": "GitHub Actions · XCTest · AWS ECS Fargate",
+        "body": "Recorded regression checks, container deployment configuration, and source-linked release evidence."
+      }
+    ],
+    "codeLabel": "A small piece you can run",
+    "codeTitle": "Recipe quantity validation",
+    "codeBody": "Explore Naerim’s numeric boundaries, proportional water scaling, and draft preservation in a standalone Swift package.",
+    "codeLink": "Read the implementation",
+    "testLink": "See the passing CI run"
+  },
+  "teams": {
+    "kicker": "03 / Collaboration",
+    "title": "Work built with others.",
+    "items": [
+      {
+        "name": "Stack Snapshot",
+        "role": "Backend contributor · six-person team",
+        "body": "Implemented QR generation and photo-download functionality for an event photo-booth service. The team used Java, Spring Boot, JPA, and MySQL.",
+        "link": "https://github.com/mjgwon24/stack-snapshot-back/commit/88965a2bbc6e419ca10b7fc5641d73bf693046c4",
+        "label": "See my contribution"
+      },
+      {
+        "name": "Gyeongju Hackathon 2024",
+        "role": "Python / Django backend · Team Null",
+        "body": "A tourism experience service combining reservations with photo-layer collection and composition. Our team received second place overall.",
+        "link": "https://github.com/Dongguk-Developer/2024hackathon_null",
+        "label": "Explore the team project"
+      }
+    ]
+  },
+  "about": {
+    "kicker": "04 / About",
+    "title": "Curious about how things work.\nCareful about how they feel.",
+    "body": "My background is in Computer Engineering at Dongguk University WISE. A year in the Faculty of Information Technology at Tokyo City University shaped my goal of working as a software developer in Japan. I enjoy turning a familiar routine into software that is easier to use and easier to maintain.",
+    "timeline": [
+      {
+        "label": "Dongguk University WISE",
+        "body": "Computer Engineering"
+      },
+      {
+        "label": "Tokyo City University",
+        "body": "One-year exchange · Faculty of Information Technology"
+      },
+      {
+        "label": "StackUp · 2nd cohort",
+        "body": "Collaborative learning and programming practice · 2023"
+      }
+    ],
+    "learning": "Earlier learning projects",
+    "archive": "Study archive",
+    "learningLinks": [
+      {
+        "label": "Java / Android",
+        "url": "https://github.com/suheon927/AndroidStudioProjects"
+      },
+      {
+        "label": "C / Mini games",
+        "url": "https://github.com/suheon927/MiniGames"
+      },
+      {
+        "label": "Python / Perceptrons",
+        "url": "https://github.com/suheon927/PerceptronPractice"
+      }
+    ]
+  },
+  "contact": {
+    "kicker": "05 / Contact",
+    "title": "Let’s talk about\nwhat comes next.",
+    "body": "I’m interested in software development opportunities in Japan and conversations about useful, thoughtfully built products.",
+    "emailLabel": "Email me",
+    "githubLabel": "GitHub profile"
+  },
+  "footer": {
+    "note": "Designed and developed by Yi Suheon.",
+    "updated": "Updated September 2026",
+    "source": "Portfolio source",
+    "top": "Back to top"
+  },
+  "notices": {
+    "javascript": "Language links and project pages work without JavaScript. Open an image link to view its full size.",
+    "bibleLink": "Korean Bible Society licensing guidance",
+    "captureSource": "Screenshot provenance",
+    "previous": "Previous image",
+    "next": "Next image"
+  }
+}
