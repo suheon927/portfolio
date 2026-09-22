@@ -37,3 +37,40 @@ if(dialog && typeof dialog.showModal === 'function') {
   dialog.addEventListener('click', event => {if(event.target===dialog) dialog.close();});
   dialog.addEventListener('close', () => document.body.classList.remove('lightbox-open'));
 }
+
+// Credentials remain selectable without JavaScript. Copying never submits a form.
+const copyStatus = document.querySelector('#demo-copy-status');
+const copyButtons = [...document.querySelectorAll('[data-copy-credential]')];
+let copying = false;
+copyButtons.forEach(button => {
+  button.hidden = false;
+  button.addEventListener('click', async () => {
+    const input = document.getElementById(button.dataset.copyCredential);
+    if (!input || !copyStatus || copying) return;
+    copying = true;
+    copyButtons.forEach(item => { item.disabled = true; });
+    copyStatus.textContent = '';
+    let copied = false;
+    try {
+      try {
+        if (typeof navigator.clipboard?.writeText === 'function') {
+          await navigator.clipboard.writeText(input.value);
+          copied = true;
+        }
+      } catch {
+        // A blocked Clipboard API can still allow the legacy operation below.
+      }
+      if (!copied) {
+        input.focus();
+        input.select();
+        input.setSelectionRange(0, input.value.length);
+        try { copied = document.execCommand?.('copy') === true; } catch { /* Keep the value selected for manual copying. */ }
+      }
+      copyStatus.textContent = copied ? button.dataset.copied : button.dataset.copyFallback;
+    } finally {
+      copying = false;
+      copyButtons.forEach(item => { item.disabled = false; });
+      if (copied) button.focus();
+    }
+  });
+});

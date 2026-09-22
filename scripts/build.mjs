@@ -1,8 +1,10 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validatePublicDemos, demoCardLink, demoSection } from './public-demos.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const publicDemos = validatePublicDemos(JSON.parse(await readFile(resolve(root, 'content/public-demos.json'), 'utf8')));
 const locales = ['ko', 'ja', 'en'];
 const origin = 'https://yisuheon.dev';
 const gh = 'https://github.com/suheon927';
@@ -39,7 +41,7 @@ function footer(c) {
 function card(c,p,i) {
   return `<article class="project-card ${p.id}">
     <a class="project-image" href="${path(c.locale,p.id)}" aria-label="${e(p.name)} · ${e(c.work.open)}"><span class="project-number" aria-hidden="true">0${i+1}</span>${img(p.cover,p.screens.find(s => s.file === p.cover).alt,'loading="lazy" decoding="async"')}<span class="image-link-icon" aria-hidden="true">↗</span></a>
-    <div class="project-card-body"><p class="eyebrow">${e(p.eyebrow)}</p><h3><a href="${path(c.locale,p.id)}">${e(p.name)}</a></h3><p class="project-tagline">${e(p.tagline)}</p>${chips(p.stack)}<div class="card-links"><a class="text-link" href="${path(c.locale,p.id)}">${e(c.work.open)} <span aria-hidden="true">→</span></a>${external(p.store,c.work.store)}</div></div>
+    <div class="project-card-body"><p class="eyebrow">${e(p.eyebrow)}</p><h3><a href="${path(c.locale,p.id)}">${e(p.name)}</a></h3><p class="project-tagline">${e(p.tagline)}</p>${chips(p.stack)}<div class="card-links"><a class="text-link" href="${path(c.locale,p.id)}">${e(c.work.open)} <span aria-hidden="true">→</span></a>${external(p.store,c.work.store)}${demoCardLink(c,p,publicDemos)}</div></div>
   </article>`;
 }
 function home(c) {
@@ -66,7 +68,7 @@ function gallery(c,p) {
 function project(c,p) {
   return `<main id="main" class="case-study ${p.id}">
 <section class="case-hero"><a class="back-link" href="${path(c.locale)}#work">← ${e(c.work.back)}</a><p class="eyebrow">${e(p.eyebrow)}</p><h1>${e(p.name)}</h1><p class="case-tagline">${e(p.tagline)}</p><p class="case-description">${e(p.description)}</p><div class="button-row">${external(p.store,c.work.store,'button button-primary')}${external(p.technical,c.work.technical,'button button-outline')}</div><dl class="project-meta"><div><dt>${e(c.work.roleLabel)}</dt><dd>${e(c.work.role)}</dd></div><div><dt>${e(c.work.stackLabel)}</dt><dd>${chips(p.stack)}</dd></div></dl></section>
-${gallery(c,p)}
+${demoSection(c,p,publicDemos)}${gallery(c,p)}
 <section class="section architecture-section"><h2>${e(c.work.architecture)}</h2><p class="small-note">${e(c.work.snapshotNote)}</p><ol class="architecture-flow">${p.flow.map((f,i) => `<li><span class="item-number">0${i+1}</span><strong>${e(f)}</strong></li>`).join('')}</ol><p class="section-intro">${e(p.flowNote)}</p></section>
 <section class="section decisions-section"><h2>${e(c.work.decisions)}</h2><div class="decisions-grid">${p.decisions.map((d,i) => `<article><span class="item-number">0${i+1}</span><h3>${e(d.title)}</h3><p>${e(d.body)}</p></article>`).join('')}</div></section>
 <section class="section process-section"><div class="process-heading"><p class="eyebrow">${e(p.name)}</p><h2>${e(c.work.ai)}</h2></div><div class="prose">${p.ai.map(t => `<p>${e(t)}</p>`).join('')}</div></section>
@@ -85,7 +87,7 @@ function layout(c,p=null) {
 <html lang="${c.locale}">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f4efe6"><title>${e(title)}</title><meta name="description" content="${e(description)}"><link rel="canonical" href="${url}">
 ${locales.map(l=>`<link rel="alternate" hreflang="${l}" href="${origin+path(l,p?.id)}">`).join('\n')}<link rel="alternate" hreflang="x-default" href="${origin+path('ko',p?.id)}">
-<meta property="og:type" content="website"><meta property="og:site_name" content="Yi Suheon"><meta property="og:title" content="${e(title)}"><meta property="og:description" content="${e(description)}"><meta property="og:url" content="${url}"><meta property="og:locale" content="${{ko:'ko_KR',ja:'ja_JP',en:'en_US'}[c.locale]}"><meta property="og:image" content="${origin}/assets/screenshots/${preview}"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/styles.css?v=20260917"><script defer src="/assets/site.js?v=20260917"></script><script type="application/ld+json">${JSON.stringify(schema).replace(/</g,'\\u003c')}</script></head>
+<meta property="og:type" content="website"><meta property="og:site_name" content="Yi Suheon"><meta property="og:title" content="${e(title)}"><meta property="og:description" content="${e(description)}"><meta property="og:url" content="${url}"><meta property="og:locale" content="${{ko:'ko_KR',ja:'ja_JP',en:'en_US'}[c.locale]}"><meta property="og:image" content="${origin}/assets/screenshots/${preview}"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/styles.css?v=20260922"><script defer src="/assets/site.js?v=20260922"></script><script type="application/ld+json">${JSON.stringify(schema).replace(/</g,'\\u003c')}</script></head>
 <body id="top">${header(c,p?.id)}${p?project(c,p):home(c)}${footer(c)}</body></html>\n`;
 }
 const pages=[];

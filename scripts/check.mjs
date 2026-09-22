@@ -2,15 +2,25 @@ import { readFile, stat } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
+import { validatePublicDemos, publicDemoFor } from './public-demos.mjs';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const locales=['ko','ja','en'];
 const data={};
+const demos=validatePublicDemos(JSON.parse(await readFile(resolve(root,'content/public-demos.json'),'utf8')));
+const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nonemptyStrings=(value,label)=>{
+  if(typeof value==='string') assert.ok(value.trim(),`${label}: missing translation`);
+  else for(const [key,item] of Object.entries(value)) nonemptyStrings(item,`${label}.${key}`);
+};
 for(const locale of locales) data[locale]=JSON.parse(await readFile(resolve(root,`content/${locale}.json`),'utf8'));
 const shape=v=>Array.isArray(v)?v.map(shape):v&&typeof v==='object'?Object.fromEntries(Object.entries(v).map(([k,v])=>[k,shape(v)])):typeof v;
 for(const locale of locales){
   assert.deepEqual(shape(data[locale]),shape(data.en),`${locale}: locale schema drift`);
   assert.equal(data[locale].locale,locale);
+  nonemptyStrings(data[locale].demo,`${locale}.demo`);
+  assert.equal(data[locale].demo.steps.length,3,`${locale}: expected three demo login steps`);
+  assert.deepEqual(Object.keys(data[locale].demo.features).sort(),['updream','updream-admin']);
   data[locale].projects.forEach((p,i)=>{
     const ref=data.en.projects[i];
     for(const field of ['id','store','technical','cover','stack']) assert.deepEqual(p[field],ref[field],`${locale}: ${p.id}.${field}`);
@@ -48,12 +58,23 @@ for(const [route,body] of html){
   }
   if(route.includes('/projects/')){
     const projectId=route.split('/')[3];
+    const demo=publicDemoFor(demos,projectId);
+    assert.equal(body.includes('id="demo"'),Boolean(demo),`${route}: demo visibility does not match configuration`);
+    assert.equal((body.match(/data-copy-credential=/g)||[]).length,demo?2:0,`${route}: expected two copy buttons only for an enabled demo`);
+    if(demo){
+      for(const field of ['username','password']) assert.ok(body.includes(`id="demo-${field}" type="text" value="${escape(demo[field])}" readonly`),`${route}: incorrect ${field} field`);
+      assert.ok(body.includes('id="demo-copy-status" role="status" aria-live="polite" aria-atomic="true"'));
+      assert.ok(body.includes(escape(data[locale].demo.notice)),`${route}: missing demo notice`);
+      assert.ok(body.includes(escape(data[locale].demo.copyFallback)),`${route}: missing localized copy fallback`);
+    }
     for(const l of locales) assert.ok(body.includes(`href="/${l}/projects/${projectId}/"`),`${route}: language route not preserved`);
     assert.ok(body.includes(data[locale].work.snapshotNote));
     assert.equal((body.match(/data-lightbox /g)||[]).length,data[locale].projects.find(p=>p.id===projectId).screens.length);
+  }else{
+    for(const project of data[locale].projects) assert.equal(body.includes(`href="/${locale}/projects/${project.id}/#demo"`),Boolean(publicDemoFor(demos,project.id)),`${route}: incorrect ${project.id} demo link`);
   }
   const schema=body.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1];
   JSON.parse(schema);
 }
 assert.equal((await readFile(resolve(root,'CNAME'),'utf8')).trim(),'yisuheon.dev');
-console.log(`PASS: 3 locale schemas, ${routes.length} pages, ${links} local references, ${images} image instances, metadata, gallery routes, and CNAME.`);
+console.log(`PASS: 3 locale schemas, ${routes.length} pages, ${links} local references, ${images} image instances, metadata, gallery routes, public demo visibility, and CNAME.`);

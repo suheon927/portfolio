@@ -1,0 +1,12 @@
+{
+  "updream": {
+    "username": "updream.app.review",
+    "password": "ZYQw0tEyqiWOTSZ80k1gwDsXyTVSLaux",
+    "enabled": true
+  },
+  "updream-admin": {
+    "username": "updream.admin.review",
+    "password": "iSClZj1ZKzt5DKBDqmQsLN6lbIBFh3Vu",
+    "enabled": true
+  }
+}

@@ -355,5 +355,39 @@
     "captureSource": "Screenshot provenance",
     "previous": "Previous image",
     "next": "Next image"
+  },
+  "demo": {
+    "link": "Try the demo",
+    "kicker": "Public demo",
+    "title": "Try the demo",
+    "intro": "Explore the app’s main screens with a public demo account.",
+    "stepsTitle": "How to sign in",
+    "steps": [
+      "Install the app from the App Store.",
+      "On the login screen, choose “데모 계정으로 로그인” (sign in with a demo account).",
+      "Enter the login ID and password below."
+    ],
+    "install": "Install from the App Store",
+    "featuresTitle": "Things to explore",
+    "features": {
+      "updream": [
+        "Browse gratitude and reflection entries by date",
+        "Check announcements and schedules"
+      ],
+      "updream-admin": [
+        "View attendance records and summaries",
+        "Browse the member list and operations dashboard"
+      ]
+    },
+    "credentialsTitle": "Public demo account",
+    "username": "Login ID",
+    "password": "Password",
+    "copyUsername": "Copy ID",
+    "copyPassword": "Copy password",
+    "copiedUsername": "Login ID copied.",
+    "copiedPassword": "Password copied.",
+    "copyFallback": "Automatic copying is unavailable. Please copy the selected text manually.",
+    "manualCopy": "You can also select and copy the text directly from either field.",
+    "notice": "This demo uses shared sample data. Other visitors may change it, and changes may remain. Please do not enter personal information or private prayer requests."
   }
 }

@@ -23,11 +23,19 @@ Open `http://127.0.0.1:8765/ko/`.
 - `content/{ko,ja,en}.json`: localized content; keep all three schemas in sync.
 - `scripts/build.mjs`: generates the root page, three locale home pages, nine project pages, sitemap, and robots file.
 - `assets/styles.css`: responsive styling.
-- `assets/site.js`: mobile navigation and accessible native-dialog image previews. Core content, language links, navigation, and images remain usable without JavaScript.
+- `assets/site.js`: mobile navigation, accessible native-dialog image previews, and public demo credential copying. Core content, language links, navigation, images, and manual credential selection remain usable without JavaScript.
 - `assets/screenshots/`: seven unmodified development/review captures with synthetic demo data. [Capture provenance](https://github.com/suheon927/suheon927/blob/main/assets/screenshots/README.md).
-- `scripts/check.mjs`: validates translations' structure, routes, local links and fragments, gallery coverage, metadata, and domain preservation.
+- `scripts/check.mjs`: validates translations' structure, routes, local links and fragments, gallery coverage, metadata, demo visibility, and domain preservation. `scripts/public-demos.test.mjs` also checks enabled/disabled demo builds and clipboard fallbacks with synthetic test credentials.
 
 All language and project pages are pre-rendered HTML. Language changes preserve the selected project. The Korean root page is a convenient entry point with `/ko/` as its canonical URL.
+
+## Public app demos
+
+`content/public-demos.json` is the single source for the member (`updream`) and administrator (`updream-admin`) demo accounts. Both accounts use shared sample data, and visitors' changes may remain. Naerim has no demo-account section.
+
+For an account verified and approved for public sharing, fill `username` and `password`, set that record's `enabled` to `true`, and run build and tests. This adds a home-card link and a localized project-page section with installation steps, recommended screens, and copy buttons. The login instructions retain the Korean label shown in the apps. Demo copy is maintained in the `demo` object of each locale file.
+
+Only intentionally public demo credentials belong in this file: it is part of the public repository and static site. `enabled: false` hides the generated section and links; it does not make configured values private. Clipboard access can depend on browser permissions; manual selection remains available.
 
 ## Publish
 
