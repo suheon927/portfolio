@@ -2,8 +2,8 @@
   "locale": "en",
   "name": "Yi Suheon",
   "meta": {
-    "title": "Yi Suheon — Software Developer",
-    "description": "Independent developer of UP-Dream, UP-Dream Admin, and Naerim. Explore released apps, native interfaces, shared APIs, and the engineering decisions behind them."
+    "title": "Yi Suheon — Software Engineer",
+    "description": "I plan, build, ship, and operate mobile apps and the backend behind them. Explore UP-Dream — iOS and Android member app, admin web, and admin app, used every week — and Naerim."
   },
   "nav": {
     "work": "Work",
@@ -17,30 +17,30 @@
     "home": "Home"
   },
   "hero": {
-    "kicker": "Software developer · Korea → Japan",
+    "kicker": "Software engineer · Korean & Japanese · Korea → Japan",
     "title": "From an everyday need\nto an app people can use.",
-    "body": "I’m Yi Suheon. I plan, design, develop, and release iOS apps and the services behind them. My work connects native interfaces with careful data handling and practical daily workflows.",
+    "body": "I’m Yi Suheon. I take products from planning and design through development, release, and operation. I built and run UP-Dream, used every week by a church youth group, as a member app on iOS and Android, an admin web console, a native admin app, and a shared API. Japanese is my second native language.",
     "primary": "Explore my work",
     "secondary": "View GitHub",
     "facts": [
       {
-        "value": "03",
-        "label": "Apps released on the App Store"
+        "value": "67%",
+        "label": "of regular attendees use UP-Dream"
       },
       {
-        "value": "01",
-        "label": "Developer, from planning to release"
+        "value": "04",
+        "label": "Store-released apps · App Store 3, Google Play 1"
       },
       {
-        "value": "1 year",
-        "label": "Exchange at Tokyo City University"
+        "value": "N1",
+        "label": "Native-level Japanese · one year at Tokyo City University"
       }
     ]
   },
   "work": {
     "kicker": "01 / Selected work",
     "title": "Built for real routines.",
-    "intro": "Two product families, three released apps. Each case study connects the interface to the decisions behind it.",
+    "intro": "Two products, four store-released apps. Each case study connects the interface to the decisions behind it.",
     "open": "Explore the project",
     "store": "App Store",
     "technical": "Technical overview",
@@ -62,15 +62,16 @@
     "sourceCode": "Source code",
     "tests": "Tests and CI",
     "snapshotNote": "Engineering details reflect source reviewed on September 17, 2026. App Store releases may contain an earlier subset.",
-    "homeScreenNote": "Screenshots use synthetic demo data. Project pages include capture dates and full-size views."
+    "homeScreenNote": "Screenshots use synthetic demo data. Project pages include capture dates and full-size views.",
+    "play": "Google Play"
   },
   "projects": [
     {
       "id": "updream",
       "name": "UP-Dream",
-      "eyebrow": "Community member app",
+      "eyebrow": "Member app · iOS & Android",
       "tagline": "A place for community, reflection, and the next small step.",
-      "description": "A member app for a church community, bringing attendance, announcements, schedules, reservations, personal reflection, and Bible reading into one place. I built the mobile experience and its shared backend, alongside a separate administrator app.",
+      "description": "A church youth-group service bringing attendance, announcements, schedules, room reservations, prayer requests, personal reflection, and Bible reading into one place. I released the member app on iOS and Android and built and run the shared backend used by the admin web and admin app.",
       "stack": [
         "TypeScript",
         "React Native",
@@ -97,11 +98,11 @@
         }
       ],
       "flow": [
-        "React Native member app",
-        "Authenticated TypeScript API",
+        "React Native member app · React admin web · SwiftUI admin app",
+        "TypeScript API checking authentication and permissions",
         "PostgreSQL · private S3"
       ],
-      "flowNote": "Member and administrator clients share the backend. Database records and licensed Bible text have separate storage and access boundaries.",
+      "flowNote": "The member app, admin web, and admin app share one backend. Database records and licensed Bible text have separate storage and access boundaries.",
       "decisions": [
         {
           "title": "Recover a session without losing trust",
@@ -124,14 +125,107 @@
         "I handled the copyright review and the work to secure permission for the Korean 개역개정 translation used in UP-Dream. The project checklist records permission confirmation. Copyright remains with the Korean Bible Society, and the supporting documents are retained privately.",
         "The reader provides all 66 books to approved members. The full text stays outside the app bundle and public repository, is delivered from private AWS S3 through an authenticated API, and is checked for integrity. The app displays copyright notices and uses an account-specific temporary cache that is cleared on logout and account changes."
       ],
-      "evidence": "The technical overview documents source boundaries, design trade-offs, and dated test results, including session recovery, cache isolation, and concurrent writes."
+      "evidence": "The technical overview documents source boundaries, design trade-offs, and dated test results, including session recovery, cache isolation, concurrent writes, and a fix for a crash during Android’s first layout.",
+      "play": "https://play.google.com/store/apps/details?id=kr.or.gimhaejeil.youth",
+      "problem": {
+        "title": "Why I built it",
+        "body": "Room bookings lived on a shared Naver calendar and communication in a KakaoTalk open chat, so information was scattered. UP-Dream brings announcements, schedules, reservations, attendance, and prayer requests into one service, with sign-up gated by roster verification and administrator approval."
+      },
+      "usage": {
+        "title": "Real use",
+        "lead": "Counted across 48 Sunday youth services, 1 December 2025 to 3 November 2026.",
+        "items": [
+          {
+            "value": "67.2%",
+            "label": "41 of 61 regular attendees (24 or more of the 48 services) use the app"
+          },
+          {
+            "value": "49.1%",
+            "label": "56 of the 114 people who attended at least once have signed up"
+          }
+        ],
+        "note": "People are counted once each; pastors and test accounts are excluded. Sign-up means required details entered and terms accepted. Attendance comes from records saved in the app, and unrecorded weeks are not counted as absences."
+      },
+      "surfaces": {
+        "title": "One service, four surfaces",
+        "intro": "Management work is split by situation between the web and a native app, and every permission decision is made in one place: the server.",
+        "items": [
+          {
+            "name": "Member app",
+            "platform": "iOS · Android",
+            "body": "Announcements, schedules, reservations, attendance, prayer requests, and QT and Bible reading for every member. Released to both stores from one Expo codebase.",
+            "stack": "TypeScript · React Native · Expo"
+          },
+          {
+            "name": "Admin web",
+            "platform": "Browser",
+            "body": "Heavier desk work: sign-up approvals, member records, and account merges. Uses two-step verification.",
+            "stack": "TypeScript · React"
+          },
+          {
+            "name": "Admin app",
+            "platform": "iPhone · iPad",
+            "body": "Quick on-site work such as Sunday attendance. Face ID or Touch ID on entry, showing only the actions the server allows.",
+            "stack": "Swift · SwiftUI"
+          },
+          {
+            "name": "Shared API",
+            "platform": "AWS ECS Fargate",
+            "body": "Sessions, permissions, and business rules for all three clients in one place. Attendance changes are saved in transactions.",
+            "stack": "TypeScript · PostgreSQL · S3"
+          }
+        ],
+        "note": "I also run the service website, its terms, privacy and child-safety policies, the in-app account-deletion flow, and the copyright permission for the Bible text.",
+        "site": "https://updream.church",
+        "siteLabel": "Service website"
+      },
+      "aiSteps": {
+        "title": "How I work with AI",
+        "items": [
+          "I define the requirement myself, starting from beta feedback and operating needs.",
+          "I set the scope: which screens may change and which logic must not be touched.",
+          "I delegate implementation: scoped frontend work and integration with Claude Code and Codex.",
+          "I verify against data and permission rules, with regression tests and CI.",
+          "I record where the AI was wrong and fix it myself.",
+          "I keep the hard calls: identity, permissions, concurrency, and release scope."
+        ]
+      },
+      "aiCase": {
+        "title": "When the AI was wrong: account merging in the admin web",
+        "parts": [
+          {
+            "label": "Situation",
+            "body": "The same member had signed in with two different OAuth providers (for example Kakao and Apple), leaving two accounts. Their roster record already held attendance history, and the admin web had to merge the accounts without losing it."
+          },
+          {
+            "label": "What I delegated",
+            "body": "The account-merge feature in the admin web was implemented with an AI coding tool."
+          },
+          {
+            "label": "What failed",
+            "body": "Finding likely duplicate accounts worked. Running the merge did not: the accounts stayed separate, and attendance remained attached to the wrong account."
+          },
+          {
+            "label": "Cause",
+            "body": "The AI-generated merge treated the OAuth account as the unit and moved data from one account to another. Attendance, however, belongs to the roster record, not the login account. Because the merge ignored where the data was actually attached, account fields moved while attendance stayed behind."
+          },
+          {
+            "label": "Fix: change the axis",
+            "body": "I rebuilt the merge around the roster record as the single identity for a person. Each OAuth account is merged in as a login method attached to that record. Attendance was already attached to the roster record, so it never has to move or be rewritten."
+          },
+          {
+            "label": "What changed in how I work",
+            "body": "Account and permission code is hard to undo when it goes wrong, so I no longer accept AI output there as-is; I edit and review it myself. AI handles clearly scoped screen work, and decisions about identity and permissions stay with me."
+          }
+        ]
+      }
     },
     {
       "id": "updream-admin",
       "name": "UP-Dream Admin",
-      "eyebrow": "Native operations app",
+      "eyebrow": "Native admin app · iPhone & iPad",
       "tagline": "The right tools for the people looking after a community.",
-      "description": "A native iPhone and iPad app for membership approvals, attendance, and daily operations. I brought the service’s administrative workflows to SwiftUI, with a separate administrator session and server-controlled capabilities.",
+      "description": "A native iPhone and iPad app for sign-up approvals, attendance, and daily operations. Desk work belongs to the admin web and on-site work to this app, with an administrator-only session, biometric sign-in, and server-defined action permissions.",
       "stack": [
         "Swift",
         "SwiftUI",
@@ -178,7 +272,8 @@
         }
       ],
       "ai": [
-        "I used AI assistance for the SwiftUI frontend, including screen implementation and presentation. I defined the operational workflows and interface requirements."
+        "I used AI assistance for the SwiftUI frontend, including screen implementation and presentation. I defined the operational workflows and interface requirements.",
+        "I edit and review account and permission code myself rather than accepting AI output as-is. The account-merge case on the UP-Dream page explains why."
       ],
       "rights": [],
       "evidence": "The technical overview connects native session handling, API authorization, and attendance behavior to selected XCTest and policy checks. It distinguishes executed checks from source review."
@@ -267,7 +362,7 @@
       {
         "title": "Connected services",
         "tech": "TypeScript · React Native · React · PostgreSQL",
-        "body": "The UP-Dream member app, web administration, shared API, and permission-aware data access."
+        "body": "UP-Dream member app on iOS and Android, admin web, shared APIs, and permission-checked data access."
       },
       {
         "title": "Delivery and verification",
@@ -304,15 +399,19 @@
   "about": {
     "kicker": "04 / About",
     "title": "Curious about how things work.\nCareful about how they feel.",
-    "body": "My background is in Computer Engineering at Dongguk University WISE. A year in the Faculty of Information Technology at Tokyo City University shaped my goal of working as a software developer in Japan. I enjoy turning a familiar routine into software that is easier to use and easier to maintain.",
+    "body": "I study Computer Engineering at Dongguk University WISE. I lived in Japan from 2001 to 2014 and speak Japanese at a native level, and a year in the Faculty of Information Technology at Tokyo City University shaped my goal of working as a software engineer in Japan. I enjoy turning a familiar routine into software that is easier to use and easier to maintain.",
     "timeline": [
       {
         "label": "Dongguk University WISE",
-        "body": "Computer Engineering"
+        "body": "Computer Engineering · graduating March 2027"
       },
       {
         "label": "Tokyo City University",
-        "body": "One-year exchange · Faculty of Information Technology"
+        "body": "One-year exchange · Faculty of Information Technology · Apr 2025 – Mar 2026"
+      },
+      {
+        "label": "Lived in Japan · 2001–2014",
+        "body": "Native-level Japanese · JLPT N1 (Dec 2023)"
       },
       {
         "label": "StackUp · 2nd cohort",
@@ -345,7 +444,7 @@
   },
   "footer": {
     "note": "Designed and developed by Yi Suheon.",
-    "updated": "Updated September 2026",
+    "updated": "Updated November 2026",
     "source": "Portfolio source",
     "top": "Back to top"
   },
@@ -363,7 +462,7 @@
     "intro": "Explore the app’s main screens with a public demo account.",
     "stepsTitle": "How to sign in",
     "steps": [
-      "Install the app from the App Store.",
+      "Install the app from the App Store. The member app is also on Google Play.",
       "On the login screen, choose “데모 계정으로 로그인” (sign in with a demo account).",
       "Enter the login ID and password below."
     ],
