@@ -23,7 +23,18 @@ for(const locale of locales){
   assert.deepEqual(Object.keys(data[locale].demo.features).sort(),['updream','updream-admin']);
   data[locale].projects.forEach((p,i)=>{
     const ref=data.en.projects[i];
-    for(const field of ['id','store','technical','cover','stack']) assert.deepEqual(p[field],ref[field],`${locale}: ${p.id}.${field}`);
+    for(const field of ['id','technical','cover','stack']) assert.deepEqual(p[field],ref[field],`${locale}: ${p.id}.${field}`);
+    const listing = new URL(ref.store);
+    if (locale === 'ja') listing.pathname = listing.pathname.replace(/^\/kr\//, '/jp/');
+    assert.equal(p.store, listing.href, `${locale}: ${p.id} App Store listing`);
+    if (ref.play) {
+      const play = new URL(ref.play);
+      if (locale === 'ja') {
+        play.searchParams.set('hl', 'ja');
+        play.searchParams.set('gl', 'JP');
+      }
+      assert.equal(p.play, play.href, `${locale}: ${p.id} Google Play listing`);
+    }
     p.screens.forEach((s,j)=>{assert.equal(s.file,ref.screens[j].file);assert.equal(s.date,ref.screens[j].date);assert.ok(s.alt.trim());});
   });
 }

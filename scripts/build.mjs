@@ -9,6 +9,7 @@ const locales = ['ko', 'ja', 'en'];
 const origin = 'https://yisuheon.dev';
 const gh = 'https://github.com/suheon927';
 const sample = gh + '/naerim-recipe-validation';
+const attendanceSample = gh + '/suheon927/tree/main/examples/attendance-versioning';
 const ci = sample + '/actions/runs/35164490286';
 const provenance = gh + '/suheon927/blob/main/assets/screenshots/README.md';
 const dimensions = {
@@ -46,7 +47,7 @@ function card(c,p,i) {
 }
 function home(c) {
   return `<main id="main">
-<section class="hero" aria-labelledby="hero-title"><div class="hero-copy"><p class="eyebrow">${e(c.hero.kicker)}</p><h1 id="hero-title">${lines(c.hero.title)}</h1><p class="hero-body">${e(c.hero.body)}</p><div class="button-row"><a class="button button-primary" href="#work">${e(c.hero.primary)} <span aria-hidden="true">↓</span></a>${external(gh,c.hero.secondary,'button button-quiet')}</div></div><div class="hero-visual" aria-hidden="true"><div class="visual-orbit"></div><span class="visual-caption">${e(c.name)} / 2026</span>${img('updream-growth.png','','class="hero-shot shot-a" fetchpriority="high"')}${img('updream-admin-overview.png','','class="hero-shot shot-b" fetchpriority="high"')}${img('naerim-brewing.png','','class="hero-shot shot-c" fetchpriority="high"')}<span class="visual-end">iOS · Android · SwiftUI · React Native</span></div></section>
+<section class="hero" aria-labelledby="hero-title"><div class="hero-copy"><p class="eyebrow">${e(c.hero.kicker)}</p><h1 id="hero-title">${lines(c.hero.title)}</h1><p class="hero-body">${e(c.hero.body)}</p><div class="button-row"><a class="button button-primary" href="#work">${e(c.hero.primary)} <span aria-hidden="true">↓</span></a><a class="button button-outline" href="${path(c.locale,'updream')}#ai-case">${e(c.hero.caseLink)}</a>${external(gh,c.hero.secondary,'button button-quiet')}</div></div><div class="hero-visual" aria-hidden="true"><div class="visual-orbit"></div><span class="visual-caption">${e(c.name)} / 2026</span>${img('updream-growth.png','','class="hero-shot shot-a" fetchpriority="high"')}${img('updream-admin-overview.png','','class="hero-shot shot-b" fetchpriority="high"')}${img('naerim-brewing.png','','class="hero-shot shot-c" fetchpriority="high"')}<span class="visual-end">iOS · Android · SwiftUI · React Native</span></div></section>
 <div class="facts-strip">${c.hero.facts.map(f => `<div><strong>${e(f.value)}</strong><span>${e(f.label)}</span></div>`).join('')}</div>
 <section class="section work-section" id="work">${heading(c.work.kicker,c.work.title,c.work.intro)}<div class="projects-grid">${c.projects.map((p,i) => card(c,p,i)).join('')}</div><p class="small-note">${e(c.work.homeScreenNote)}</p></section>
 <section class="section engineering-section" id="engineering">${heading(c.engineering.kicker,c.engineering.title,c.engineering.intro)}<div class="engineering-grid">${c.engineering.groups.map((g,i) => `<article><span class="item-number">0${i+1}</span><h3>${e(g.title)}</h3><p class="tech-line">${e(g.tech)}</p><p>${e(g.body)}</p></article>`).join('')}</div>
@@ -88,7 +89,7 @@ ${overview(p)}${surfaces(p)}${demoSection(c,p,publicDemos)}${gallery(c,p)}
 <section class="section decisions-section"><h2>${e(c.work.decisions)}</h2><div class="decisions-grid">${p.decisions.map((d,i) => `<article><span class="item-number">0${i+1}</span><h3>${e(d.title)}</h3><p>${e(d.body)}</p></article>`).join('')}</div></section>
 ${aiProcess(c,p)}
 ${p.rights.length ? `<section class="section rights-section"><div><span class="rights-number" aria-hidden="true">66</span><h2>${e(c.work.rights)}</h2></div><div class="prose">${p.rights.map(t => `<p>${e(t)}</p>`).join('')}${external('https://github.com/suheon927/suheon927/blob/main/docs/updream.md#bible-text-permissions-and-66-book-delivery',c.work.technical)}</div></section>` : ''}
-<section class="section evidence-section"><div><h2>${e(c.work.evidence)}</h2><p>${e(p.evidence)}</p></div><div class="evidence-links">${external(p.technical,c.work.technical,'button button-outline')}${p.id==='naerim' ? external(sample,c.work.sourceCode,'button button-outline')+external(ci,c.work.tests,'button button-outline') : ''}</div></section>
+<section class="section evidence-section"><div><h2>${e(c.work.evidence)}</h2><p>${e(p.evidence)}</p></div><div class="evidence-links">${external(p.technical,c.work.technical,'button button-outline')}${p.id==='naerim' ? external(sample,c.work.sourceCode,'button button-outline')+external(ci,c.work.tests,'button button-outline') : ''}${p.id==='updream' ? external(attendanceSample,c.work.typescriptSample,'button button-outline') : ''}</div></section>
 <section class="section next-section"><h2>${e(c.work.next)}</h2><div class="next-grid">${c.projects.filter(o=>o.id!==p.id).map(o=>`<a href="${path(c.locale,o.id)}"><span>${e(o.eyebrow)}</span><strong>${e(o.name)} <span aria-hidden="true">↗</span></strong></a>`).join('')}</div></section>
 </main><dialog class="lightbox" aria-label="${e(c.work.fullImage)}"><button class="lightbox-close" aria-label="${e(c.work.closeImage)}">×</button><img alt=""><p></p></dialog>`;
 }

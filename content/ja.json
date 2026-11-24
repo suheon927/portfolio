@@ -24,18 +24,19 @@
     "secondary": "GitHubを見る",
     "facts": [
       {
-        "value": "67%",
-        "label": "定期出席者が利用するUP-Dream"
+        "value": "41/61",
+        "label": "UP-Dreamの定期出席者に占める登録完了者"
       },
       {
-        "value": "04",
-        "label": "ストアで公開したアプリ · App Store 3、Google Play 1"
+        "value": "4",
+        "label": "2つの製品のストア公開件数 · App Store 3、Google Play 1"
       },
       {
         "value": "N1",
         "label": "日本語ネイティブレベル · 東京都市大学に1年間留学"
       }
-    ]
+    ],
+    "caseLink": "アカウント統合の事例"
   },
   "work": {
     "kicker": "01 / 制作実績",
@@ -63,7 +64,8 @@
     "tests": "テストとCI",
     "snapshotNote": "技術解説は2026年9月17日に確認したソースに基づきます。App Store版には、一部の変更がまだ含まれていない場合があります。",
     "homeScreenNote": "画面にはデモデータを使用しています。撮影日と原寸画像は各プロジェクトページで確認できます。",
-    "play": "Google Play"
+    "play": "Google Play",
+    "typescriptSample": "TypeScriptのコード・テスト"
   },
   "projects": [
     {
@@ -78,7 +80,7 @@
         "Expo",
         "PostgreSQL"
       ],
-      "store": "https://apps.apple.com/kr/app/id6797694035",
+      "store": "https://apps.apple.com/jp/app/id6797694035",
       "technical": "https://github.com/suheon927/suheon927/blob/main/docs/updream.md#member-app",
       "cover": "updream-growth.png",
       "screens": [
@@ -125,19 +127,19 @@
         "UP-Dreamで使用する韓国語聖書「개역개정」の著作権を確認し、利用許諾を得るための手続きを担当しました。プロジェクトのチェックリストには許諾の確認が記録されています。著作権はKorean Bible Societyに帰属し、関連書類は非公開で保管しています。",
         "承認済みのメンバーに全66巻を提供しています。全文はアプリの配布物や公開リポジトリに含めず、非公開のAWS S3から認証付きAPIを通じて配信し、整合性を確認しています。アプリ内に著作権を表示し、アカウント別の一時キャッシュはログアウトやアカウント変更時に削除します。"
       ],
-      "evidence": "技術解説には、ソースの責務分担、設計上の利点とコスト、日付を明記したテスト結果をまとめています。セッション復元、キャッシュの分離、同時書き込み、Androidの初回レイアウト時のクラッシュ修正などを扱っています。",
-      "play": "https://play.google.com/store/apps/details?id=kr.or.gimhaejeil.youth",
+      "evidence": "技術解説には、ソースの責務分担、設計上の利点とコスト、日付を明記したテスト結果をまとめています。セッション復元、キャッシュの分離、同時書き込み、Androidの初回レイアウト時のクラッシュ修正などを扱っています。同じ出欠記録が同時に編集されたときの挙動は、TypeScriptのサンプルで確認できます。",
+      "play": "https://play.google.com/store/apps/details?id=kr.or.gimhaejeil.youth&hl=ja&gl=JP",
       "problem": {
         "title": "開発のきっかけ",
         "body": "青年部室の予約はNaverカレンダー、連絡はKakaoTalkのオープンチャットと、情報が分散していました。お知らせ・予定・予約・出席・祈りの課題を一つのサービスにまとめ、在籍確認と管理者の承認を経て登録される仕組みにしました。"
       },
       "usage": {
-        "title": "実際の利用状況",
+        "title": "登録状況",
         "lead": "2025年12月1日から2026年11月3日まで、日曜の青年礼拝48回を対象に集計しました。",
         "items": [
           {
             "value": "67.2%",
-            "label": "48回中24回以上出席した定期出席者61名のうち41名が利用"
+            "label": "48回中24回以上出席した定期出席者61名のうち41名が登録"
           },
           {
             "value": "49.1%",
@@ -147,7 +149,7 @@
         "note": "人数は重複なく数え、牧師とテスト用アカウントは除外しています。登録は必須情報の入力と規約への同意を完了したアカウントが対象です。出席はアプリに保存された記録をもとにしており、未入力の週は欠席として数えていません。"
       },
       "surfaces": {
-        "title": "一つのサービス、四つの画面",
+        "title": "一つのサービスを支える四つの構成要素",
         "intro": "管理業務は利用シーンに合わせてWebとネイティブアプリに分け、権限の判断はサーバーの一か所だけで行う設計にしました。",
         "items": [
           {
@@ -177,7 +179,7 @@
         ],
         "note": "サービスのWebサイト、利用規約・プライバシーポリシー・児童の安全に関する方針、アプリ内のアカウント削除手続き、聖書本文の利用許諾も自分で運用・管理しています。",
         "site": "https://updream.church",
-        "siteLabel": "サービスのWebサイト"
+        "siteLabel": "サービスサイト（韓国語）"
       },
       "aiSteps": {
         "title": "AIとの働き方",
@@ -232,7 +234,7 @@
         "URLSession",
         "Keychain"
       ],
-      "store": "https://apps.apple.com/kr/app/id6810673532",
+      "store": "https://apps.apple.com/jp/app/id6810673532",
       "technical": "https://github.com/suheon927/suheon927/blob/main/docs/updream.md#administrator-app",
       "cover": "updream-admin-overview.png",
       "screens": [
@@ -290,7 +292,7 @@
         "SwiftData",
         "WidgetKit"
       ],
-      "store": "https://apps.apple.com/kr/app/id6808134502",
+      "store": "https://apps.apple.com/jp/app/id6808134502",
       "technical": "https://github.com/suheon927/suheon927/blob/main/docs/naerim.md",
       "cover": "naerim-brewing.png",
       "screens": [
@@ -390,7 +392,7 @@
       {
         "name": "慶州ハッカソン 2024",
         "role": "Python / Djangoバックエンド · Team Null",
-        "body": "予約と写真レイヤーの収集・合成を組み合わせた観光体験サービスです。チームで総合2位を受賞しました。",
+        "body": "予約と写真レイヤーの収集・合成を組み合わせた観光体験サービスです。Djangoで体験予約のバックエンドを担当し、チームで総合2位を受賞しました。",
         "link": "https://github.com/Dongguk-Developer/2024hackathon_null",
         "label": "チームのプロジェクトを見る"
       }
@@ -403,11 +405,11 @@
     "timeline": [
       {
         "label": "東国大学校 WISEキャンパス",
-        "body": "コンピュータ工学 · 2027年3月卒業予定"
+        "body": "コンピュータ工学 · 2027年2月卒業予定"
       },
       {
         "label": "東京都市大学",
-        "body": "1年間の交換留学 · 情報工学部 · 2025年4月–2026年3月"
+        "body": "交換留学 · 情報工学部 · 2025年4月–2026年2月"
       },
       {
         "label": "日本での生活 · 2001–2014",

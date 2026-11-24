@@ -24,18 +24,19 @@
     "secondary": "View GitHub",
     "facts": [
       {
-        "value": "67%",
-        "label": "of regular attendees use UP-Dream"
+        "value": "41/61",
+        "label": "regular attendees registered for UP-Dream"
       },
       {
-        "value": "04",
-        "label": "Store-released apps · App Store 3, Google Play 1"
+        "value": "4",
+        "label": "Store listings across two products · App Store 3, Google Play 1"
       },
       {
         "value": "N1",
         "label": "Native-level Japanese · one year at Tokyo City University"
       }
-    ]
+    ],
+    "caseLink": "Account merge case study"
   },
   "work": {
     "kicker": "01 / Selected work",
@@ -63,7 +64,8 @@
     "tests": "Tests and CI",
     "snapshotNote": "Engineering details reflect source reviewed on September 17, 2026. App Store releases may contain an earlier subset.",
     "homeScreenNote": "Screenshots use synthetic demo data. Project pages include capture dates and full-size views.",
-    "play": "Google Play"
+    "play": "Google Play",
+    "typescriptSample": "TypeScript example and tests"
   },
   "projects": [
     {
@@ -125,19 +127,19 @@
         "I handled the copyright review and the work to secure permission for the Korean 개역개정 translation used in UP-Dream. The project checklist records permission confirmation. Copyright remains with the Korean Bible Society, and the supporting documents are retained privately.",
         "The reader provides all 66 books to approved members. The full text stays outside the app bundle and public repository, is delivered from private AWS S3 through an authenticated API, and is checked for integrity. The app displays copyright notices and uses an account-specific temporary cache that is cleared on logout and account changes."
       ],
-      "evidence": "The technical overview documents source boundaries, design trade-offs, and dated test results, including session recovery, cache isolation, concurrent writes, and a fix for a crash during Android’s first layout.",
+      "evidence": "The technical overview documents source boundaries, design trade-offs, and dated test results, including session recovery, cache isolation, concurrent writes, and a fix for a crash during Android’s first layout. A runnable TypeScript example demonstrates what happens when two edits target the same attendance record.",
       "play": "https://play.google.com/store/apps/details?id=kr.or.gimhaejeil.youth",
       "problem": {
         "title": "Why I built it",
         "body": "Room bookings lived on a shared Naver calendar and communication in a KakaoTalk open chat, so information was scattered. UP-Dream brings announcements, schedules, reservations, attendance, and prayer requests into one service, with sign-up gated by roster verification and administrator approval."
       },
       "usage": {
-        "title": "Real use",
+        "title": "Sign-ups",
         "lead": "Counted across 48 Sunday youth services, 1 December 2025 to 3 November 2026.",
         "items": [
           {
             "value": "67.2%",
-            "label": "41 of 61 regular attendees (24 or more of the 48 services) use the app"
+            "label": "41 of 61 regular attendees (24 or more of the 48 services) completed sign-up"
           },
           {
             "value": "49.1%",
@@ -147,7 +149,7 @@
         "note": "People are counted once each; pastors and test accounts are excluded. Sign-up means required details entered and terms accepted. Attendance comes from records saved in the app, and unrecorded weeks are not counted as absences."
       },
       "surfaces": {
-        "title": "One service, four surfaces",
+        "title": "One service, four components",
         "intro": "Management work is split by situation between the web and a native app, and every permission decision is made in one place: the server.",
         "items": [
           {
@@ -390,7 +392,7 @@
       {
         "name": "Gyeongju Hackathon 2024",
         "role": "Python / Django backend · Team Null",
-        "body": "A tourism experience service combining reservations with photo-layer collection and composition. Our team received second place overall.",
+        "body": "A tourism experience service combining reservations with photo-layer collection and composition. I worked on the reservation backend in Django. Our team placed second overall.",
         "link": "https://github.com/Dongguk-Developer/2024hackathon_null",
         "label": "Explore the team project"
       }
@@ -403,11 +405,11 @@
     "timeline": [
       {
         "label": "Dongguk University WISE",
-        "body": "Computer Engineering · graduating March 2027"
+        "body": "Computer Engineering · expected graduation in February 2027"
       },
       {
         "label": "Tokyo City University",
-        "body": "One-year exchange · Faculty of Information Technology · Apr 2025 – Mar 2026"
+        "body": "Exchange student · Faculty of Information Technology · Apr 2025 – Feb 2026"
       },
       {
         "label": "Lived in Japan · 2001–2014",
